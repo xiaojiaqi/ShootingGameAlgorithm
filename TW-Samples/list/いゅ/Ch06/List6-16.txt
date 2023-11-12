@@ -1,0 +1,81 @@
+List6-16 多關節
+#include <math.h>
+
+void MoveJoints(
+	int num_joint,         // 關節的數目
+	float x[], float y[],  // 關節的座標
+	float rad[],           // 關節的轉動角度
+	float vrad,            // 關節轉動的速度
+	float lrad,            // 轉動角度的極限值
+	float dist,            // 關節間的距離
+	float tx, float ty     // 目標的座標
+) {
+	int i;
+	float c, s;
+	
+	// 前半段處理：
+	// 由前端往根部算出各關節的角度。
+	c=(float)cos(vrad);
+	s=(float)sin(vrad);
+	for (i=1; i<num_joint; i++) {
+		float dxt, dyt;       // 從關節指向目標的向量
+		float dxn, dyn;       // 從關節指向前端的向量
+		float dxr=0, dyr=0;   // 順時針的向量
+		float dxl=0, dyl=0;   // 逆時針的向量
+		float dpn, dpr, dpl;  // 內積(不轉、順時針轉、逆時針轉)
+		
+		// 計算關節指向目標的向量
+		dxt=tx-x[i];
+		dyt=ty-y[i];
+
+		// 計算關節指向前端的向量和內積
+		// (不轉時的向量)
+		dxn=x[0]-x[i];
+		dyn=y[0]-y[i];
+		dpn=dxt*dxn+dyt*dyn;
+		
+		// 計算順時針轉時的向量：
+		// 若超過轉動角度的極限，就停止轉動
+		if (rad[i]+vrad<=lrad) {
+			dxr=c*dxn-s*dyn;
+			dyr=s*dxn+c*dyn;
+			dpr=dxt*dxr+dyt*dyr;
+		} else dpr=dpn;
+		
+		// 計算逆時針轉時的向量：
+		// 若超過轉動角度的極限，就停止轉動
+		if (rad[i]-vrad>=-lrad) {
+			dxl= c*dxn+s*dyn;
+			dyl=-s*dxn+c*dyn;
+			dpl=dxt*dxl+dyt*dyl;
+		} else dpl=dpn;
+		
+		// 選擇轉動方向:
+		// 比較內積，從三種選轉方式選擇其中一種
+		// 旋轉前端，求出新的前端位置
+		if (dpr>dpn && dpr>dpl) {
+			rad[i]+=vrad;
+			x[0]=x[i]+dxr;
+			y[0]=y[i]+dyr;
+		}
+		if (dpl>dpn && dpl>dpr) {
+			rad[i]-=vrad;
+			x[0]=x[i]+dxl;
+			y[0]=y[i]+dyl;
+		}
+	}
+	
+	// 後半段的處理：
+	// 從根部往前端求出關節的位置。
+	float px=dist, py=0, qx, qy;
+	for (i=num_joint-2; i>=0; i--) {
+		c=(float)cos(rad[i+1]);
+		s=(float)sin(rad[i+1]);
+		qx=c*px-s*py;
+		qy=s*px+c*py;
+		x[i]=x[i+1]+qx;
+		y[i]=y[i+1]+qy;
+		px=qx;
+		py=qy;
+	}
+}

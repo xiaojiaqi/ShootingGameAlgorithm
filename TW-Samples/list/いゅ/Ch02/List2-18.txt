@@ -1,0 +1,35 @@
+List2-18 誘導雷射的移動
+#include <stdio.h>
+
+//代表雷射各部份的構造體
+typedef struct LASER_STRUCT {
+	float X, Y;                 //座標
+	float VX, VY;               //速度
+	float OldX, OldY;           //舊座標
+	float Angle;                //轉彎角度
+	float OldAngle;             //舊轉彎角度
+	struct LASER_STRUCT* Prec;  //指向前一個部份的指標
+	                            //如果為前端時則為NULL
+} LASER_TYPE;
+
+//操縱雷射的函數
+void MoveHomingLaser(
+	LASER_TYPE* laser  //雷射的前端部份或尾巴的一部份
+) {
+
+//為前端部份時：
+	//與誘導彈動作相同
+	//誘導的具體處理是以MoveHoming函數執行
+	if (laser->Prec==NULL) {
+		MoveHoming(laser);
+	}
+
+	//非前端部份時：
+	//追著前面那一個部份
+	//複製舊座標與舊的轉彎角度
+	else {
+		laser->X=laser->Prec->OldX;
+		laser->Y=laser->Prec->OldY;
+		laser->Angle=laser->Prec->OldAngle;
+	}
+}

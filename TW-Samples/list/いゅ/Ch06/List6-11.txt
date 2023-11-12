@@ -1,0 +1,51 @@
+List6-11  魔王機的構造
+// 表示敵機的結構
+typedef struct {
+	float X, Y;  // 敵機的座標
+} ENEMY;
+
+// 表示魔王機(形狀複雜的敵機)的結構
+#define MAX_PART 32
+typedef struct {
+	float X, Y;             // 魔王機的座標
+	ENEMY* Part[MAX_PART];  // 組成魔王機的零件(敵機)
+	int NumPart;            // 零件(敵機)的數量
+	bool Fatal[MAX_PART];   // 是否為致命性的零件
+} COMPLEX_ENEMY;
+
+void MoveEnemy(ENEMY* enemy);
+void DrawEnemy(ENEMY* enemy, float x, float y);
+bool Destroyed(ENEMY* enemy);
+void DeleteEnemy(ENEMY* enemy);
+void DeleteEnemy(COMPLEX_ENEMY* enemy);
+
+// 魔王機的動作：
+// 對所有組成魔王機的小零件依序進行處理。
+void MoveComplexEnemy(COMPLEX_ENEMY* ce) {
+	for (int i=0; i<ce->NumPart; i++) {
+
+		// 敵機的行動：
+		// 具體的處理移至MoveEnemy函數進行。
+		MoveEnemy(ce->Part[i]);
+
+		// 敵機的描繪：
+		// 為了讓所有的零件成為一體化移動，
+		// 零件位置都設定成從魔王機座標起算的相對位置。
+		// 若想要移動魔王機全體，只需變更ce->X和ce->Y。
+		// 具體的處理移至DrawEnemy函數進行。
+		DrawEnemy(ce->Part[i],
+			ce->Part[i]->X+ce->X, ce->Part[i]->Y+ce->Y);
+
+		// 敵機的破壞：
+		// 關於判定和破壞的具體處理移至
+		// Destroyed，DeleteEnemy各函數處理。
+		if (Destroyed(ce->Part[i])) {
+			DeleteEnemy(ce->Part[i]);
+
+			// 整架魔王機的破壞：
+			// 若被破壞的零件是致命性的零件，
+			// 則判定整架魔王機遭到破壞。
+			if (ce->Fatal[i]) DeleteEnemy(ce);
+		}
+	}
+}

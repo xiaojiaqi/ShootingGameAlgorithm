@@ -1,0 +1,25 @@
+List7-1 使用碎片來顯示背景
+// 碎片數量(X方向、Y方向) 
+#define XMAX 20
+#define YMAX 400
+
+// 背景的顯示
+void DrawBG(
+	int sx, int sy,      // 背景上對應畫面左上角的位置
+	int sw, int sh,      // 畫面的大小
+	int cw, int ch,      // 碎片的大小
+	int map[YMAX][XMAX]  // 背景資料(碎片編號的陣列)
+) {
+	// 要描繪出來的碎片範圍
+	int x0=sx/cw, y0=sy/ch;                // 左上端的碎片
+	int x1=(sx+sw-1)/cw, y1=(sy+sh-1)/ch;  // 右下端的碎片
+
+	// 畫出碎片：
+	// 關於各碎片的描繪移至DrawChip函數進行
+	for (int i=y0; i<=y1; i++) {
+		for (int j=x0; j<=x1; j++) {
+			DrawChip(map[i][j], j*cw-sx, i*ch-sy);
+		}
+	}
+}
+

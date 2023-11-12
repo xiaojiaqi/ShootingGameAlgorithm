@@ -1,0 +1,24 @@
+List2-15圓形彈的初始化
+#include <math.h>
+
+void InitCircleBullets(
+	int n,                   //子彈數
+	float speed,             //子彈速
+	bool odd,                //奇數模式時為true
+	float vx[], float vy[]   //圓形彈的速度
+) {
+	//計算子彈與子彈之間的角度
+	float rad_step=M_PI*2/n;
+
+	//計算一開始子彈的角度
+	//奇數模式時僅以rad_step/2為間隔
+	float rad=odd ? rad_step/2 : 0;
+
+	// 決定n個子彈的速度
+	// 求取以速度speed角度rad的方向射出的子彈速度
+	//此為發射方向彈的處理應用
+	for (int i=0; i<16; i++, rad+=rad_step) {
+		vx[i]=cos(rad)*speed;
+		vy[i]=sin(rad)*speed;
+	}
+}

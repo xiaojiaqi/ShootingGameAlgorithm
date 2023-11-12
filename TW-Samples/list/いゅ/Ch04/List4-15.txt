@@ -1,0 +1,41 @@
+List4-15 利用地形反射的子彈
+void MoveReflectShot(
+	float& x0, float& y0,      //子彈的左上座標
+	float& x1, float& y1,      //子彈的右下座標
+	float& vx, float& vy,      //子彈的速度（水平、垂直）
+	float gx0[], float gy0[],  //地形的左上座標
+	float gx1[], float gy1[],  //地形的右下座標
+	int num_ground,            //地形的數量
+	float ex0[], float ey0[],  //敵機左上座標
+	float ex1[], float ey1[],  //敵機的右下座標
+	int num_enemy              //敵機的數量
+) {
+	//與地形的命中判定處理：
+	//關於子彈朝垂直方向行進的座標，
+	//判定是否命中地形。
+	//命中地形時，使垂直方向的速度倒反過來，
+	//跳脫迴圈。
+	for (int i=0; i<num_ground; i++) {
+		if (gx0[i]<x1 && x0<gx1[i] && 
+			gy0[i]<y1+vy && y0+vy<gy1[i]) {
+			vy=-vy;
+			break;
+		}
+	}
+	
+	//子彈行進
+	x0+=vx; y0+=vy;
+	x1+=vx; y1+=vy;
+
+	//與敵人的命中判定處理：
+	//命中敵人時，給予敵人損傷，
+	//跳脫迴圈。
+	//損傷具體處理是以DamageEnemy函數來執行。
+	for (int i=0; i<num_enemy; i++) {
+		if (ex0[i]<x1 && x0<ex1[i] && 
+			ey0[i]<y1 && y0<ey1[i]) {
+			DamageEnemy(i);
+			break;
+		}
+	}
+}

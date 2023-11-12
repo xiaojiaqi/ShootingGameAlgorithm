@@ -1,0 +1,26 @@
+List2-24會變化旋轉半徑的旋轉彈
+#include <math.h>
+
+void MoveLoopingBullet2(
+	float& x, float& y,    //子彈的座標
+	float& vx, float& vy,  //子彈的速度
+	float cx, float cy,    //旋轉中心的座標
+	float& r,              //半徑
+	float vr,              //半徑的變化
+	float theta,           //角度（radian）
+	float omega            // 一次移動所變化的角度（radian）
+) {
+	//使角度變化
+	theta+=omega;
+	
+	//使半徑變化
+	r+=vr;
+
+	//計算位置
+	x=cx+r*cos(theta);
+	y=cy+r*sin(theta);
+
+	//子彈的速度（僅在有必要時）
+	vx=-r*omega*sin(theta);
+	vy= r*omega*cos(theta);
+}

@@ -1,0 +1,48 @@
+List4-12 使用瞄準器的轟炸
+void SightedBomb(
+	float x, float y,        //自機的座標
+	float sx, float sy,      //瞄準器的座標
+	float bvx, float bvy,    //炸彈的速度
+	bool button              //按鈕的狀態（按下時為true）
+) {
+	//炸彈的狀態
+	static bool bombing=false;  //是否命中
+	static float bx, by;        //炸彈的座標
+	static float tx, ty;        //彈著點的座標
+
+	//非轟炸中時：
+	//按下按鈕就開始轟炸。設定炸彈的初始座標與彈著點座標。
+	if (!bombing) {
+		if (button) {
+			bombing=true;
+			bx=x; by=y;
+			tx=sx; ty=sy;
+		}
+	}
+	
+	//為轟炸中時：
+	//讓炸彈移動。當炸彈到達彈著點就使炸彈爆炸。
+	//爆炸具體處理是以Explode函數來執行。
+	else {
+		bx+=bvx; by+=bvy;
+		if (bx==tx && by==ty) {
+			Explode();
+			bombing=false;
+		}
+	}
+	
+	//描繪自機與瞄準器：
+	//具體處理是以DrawMyShip函數與DrawScope函數來處理。
+	//如果執行瞄準器與地上物的命中判定
+	//也可以使瞄準器的外框閃爍
+	DrawMyShip(x, y);
+	DrawScope(sx, sy);
+
+	//在轟炸時，描繪彈著點與炸彈：
+	//具體處理是以DrawTarget函數與DrawBomb函數來執行。
+	if (bombing) {
+		DrawTarget(tx, ty);
+		DrawBomb(bx, by);
+	}
+}
+

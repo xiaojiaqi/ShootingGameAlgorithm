@@ -1,0 +1,9 @@
+List4-2連續射擊
+void AutoShot(
+	bool button  //按鈕的狀態（按下時為true）
+) {
+	//發射子彈：
+	//按下按鈕就發射子彈。
+	//發射的詳細處理是以shot函數來執行
+	if (button) Shot();
+}

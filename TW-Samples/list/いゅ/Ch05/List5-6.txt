@@ -1,0 +1,107 @@
+List5-6 狂暴化狀態
+//自機的狀態（一般、狂暴化、衰弱）
+typedef enum {
+	NORMAL, BERSERK, WEAK
+} STATE_TYPE;
+
+//狂暴化狀態的處理
+void Berserk(
+	int num_shot,   //友機的射擊次數
+	int num_enemy,  //敵機的數量
+	int num_bullet  //子彈（敵彈）數
+) {
+	static STATE_TYPE state=NORMAL;  //自機的狀態（最初為一般狀態）
+	static int energy=0;             //能量
+	static int berserk_energy=100;   //發動狂暴化狀態時
+	                                 //所需要的能量
+	static int time;                 //效果的剩餘時間
+	
+	//視狀態分歧
+	switch (state) {
+		
+		//一般狀態
+		case NORMAL:
+
+			//一般攻擊：
+			//具體的處理是以NormalAttack函數來執行。
+			NormalAttack();
+
+			//敵機與敵彈的命中判定處理：
+			//接觸則為失誤。
+			//判定或結果的具體處理是以HitEnemy，
+			//HitBullet、Miss的各函數來執行。
+			for (int i=0; i<num_enemy; i++)
+				if (HitEnemy(i)) Miss();
+			for (int i=0; i<num_bullet; i++)
+				if (HitBullet(i)) Miss();
+
+			//與友機射擊的命中判定處理：
+			//累積能量。
+			//判定或結果的具體處理是以HitShot，
+			//DeleteShot的各函數來執行。
+			for (int i=0; i<num_shot; i++) {
+				if (HitShot(i)) {
+					energy++;
+					DeleteShot(i);
+				}
+			}
+
+			//能量值的判定
+			//能量充份地累積時，
+			//則轉變至狂暴化狀態。
+			//能量自然地減少。
+			if (energy>=berserk_energy) {
+				state=BERSERK;
+				time=300;
+			} else {
+				energy--;
+			}
+
+			break;
+		
+		//狂暴化狀態
+		case BERSERK:
+
+			//特殊攻擊
+			//具體處理是以SpecialAttack函數來執行。
+			SpecialAttack();
+
+			//與敵機或敵彈的命中判定處理：
+			//給予敵機損傷，消去敵彈
+			//結果的具體處理是以DamageEnemy，
+			//DeleteBullet的各函數來執行。
+			for (int i=0; i<num_enemy; i++)
+				if (HitEnemy(i)) DamageEnemy(i);
+			for (int i=0; i<num_bullet; i++)
+				if (HitBullet(i)) DeleteBullet(i);
+			
+			//剩餘時間結束，則轉變為衰弱狀態
+			time--;
+			if (time<=0) {
+				state=WEAK;
+				time=200;
+			}
+			
+			break;
+			
+		//衰弱狀態
+		case WEAK:
+			
+			//與敵機或子彈的命中判定處理：
+			//撞擊時判定為失誤。
+			for (int i=0; i<num_enemy; i++)
+				if (HitEnemy(i)) Miss();
+			for (int i=0; i<num_bullet; i++)
+				if (HitBullet(i)) Miss();
+
+			//剩餘時間結束則移變為一般狀態
+			time--;
+			if (time<=0) {
+				state=NORMAL;
+				energy=0;
+			}
+			
+			break;
+	}
+}
+

@@ -1,0 +1,18 @@
+List 2-7方向彈的初始化
+#include <math.h>
+
+void InitDirectedBullet(
+	float ex, float ey,    //敵機座標
+	float& x, float& y,    // 子彈座標
+	float& vx, float& vy,  //子彈速度
+	float speed,           //子彈速
+	float theta            //發射角度
+) {
+	//設定子彈座標
+	x=ex; y=ey;
+
+	//求出速度為speed，朝角度theta方向射出的子彈速度(vx,vy)：
+	// M_P為圓周率
+	vx=cos(M_PI/180*theta)*speed;
+	vy=sin(M_PI/180*theta)*speed;
+}

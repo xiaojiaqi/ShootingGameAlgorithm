@@ -1,0 +1,31 @@
+List5-19 讓敵彈和敵機的速度減慢
+void Slowing(
+	int& gauge,  // 要進入慢動作模式需耗費的能量值
+	bool button  // 是否有按著慢動作鈕
+) {
+	// 計時器：
+	// 在慢動作狀態時，調整行動次數時使用。
+	static int time=1;
+
+	// 移動敵機和敵彈：
+	// 正常狀態的時候每次都去移動，
+	// 在慢動作狀態時則兩次才動一次。
+	// 關於移動的具體處理移至
+	// MoveEnemy，MoveBullet各函數處理。
+	if (!button || (gauge>0 && time==0)) {
+		MoveEnemy();
+		MoveBullet();
+	}
+	
+	// 懲罰：
+	// 若能量值已經是0了還去按慢動作鈕的話，
+	// 則再進行一次移動。
+	// 於是，子彈就會以正常兩倍速度移動。
+	if (button && gauge==0) {
+		MoveBullet();
+	}
+
+	// 更新計時器
+	if (time>0) time--; else time=1;
+}
+

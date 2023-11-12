@@ -1,0 +1,32 @@
+List4-3集氣射擊
+void PowerShot(
+	bool button,    //按鈕的狀態（被按押時為true）
+	int min_power,  //射出子彈所需的最低能量
+	int max_power   //最高能量
+) {
+	//累積能量
+	static int power=0;
+
+	//按鈕按押時：
+	//增加累積能量。
+	if (button && power<max_power) power++;
+	
+	//放開按鈕時：
+	//能量蓄積>0時，就發射子彈，累積能量恢復為0。
+	if (!button && power>0) {
+		
+		//最高能量時：
+		//發射特殊的子彈。
+		//具體的處理是以函數MaxShot來執行。
+		if (power==max_power) MaxShot(); else
+		
+		//最低能量以上，未達到最高能量時：
+		//發射與能量累積值所對應的強力子彈。
+		//具體的處理是以BigShot函數來執行。
+		if (min_power<=power) BigShot(power);
+		
+		//累積能量恢復為0
+		power=0;
+
+	}
+}

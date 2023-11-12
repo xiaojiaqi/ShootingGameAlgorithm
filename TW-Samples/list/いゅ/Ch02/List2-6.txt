@@ -1,0 +1,14 @@
+List2-6使用固定小數點的瞄準彈移動
+void MoveAimingBulletFP(
+	int& x, int& y,  //子彈座標
+	int vx, int vy   //子彈速度
+) {
+	//在子彈座標(x,y)上加上速度(vx,vy)
+	x+=vx;
+	y+=vy;
+
+	//描繪子彈：
+	//在畫面中描繪子彈時，座標使用(x>>8, y>>8)
+	//描繪子彈具體的處理使用Draw函數
+	Draw(x>>8, y>>8);
+}

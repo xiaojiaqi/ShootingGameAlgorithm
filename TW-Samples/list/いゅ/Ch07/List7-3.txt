@@ -1,0 +1,21 @@
+List7-3 捲動的星空
+// 帶有星星資訊的結構(struct)
+typedef struct {
+	int X, Y;    // 座標
+	int VX, VY;  // 速度
+	int Color;     // 顏色
+} STAR;
+
+// 星星的捲動
+void DrawStar(
+	int num_star,   // 星星的數量
+	STAR star[]    // 星星的資訊
+) {
+	// 星星的移動和描繪:
+	// 關於描繪的具體處理移至DrawPixel函數處理。
+	for (int i=0; i<num_star; i++) {
+		star[i].X+=star[i].VX;
+		star[i].Y+=star[i].VY;
+		DrawPixel(star[i].X, star[i].Y, star[i].Color);
+	}
+}

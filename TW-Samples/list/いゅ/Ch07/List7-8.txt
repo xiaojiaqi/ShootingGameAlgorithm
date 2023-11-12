@@ -1,0 +1,9 @@
+List7-8 捲動速度的計算
+void ScrollSpeed(
+	int y,               // 自機的Y座標
+	int& svy,            // 捲動的速度(Y座標)
+	int ymin, int ymax,  // 自機Y座標的最大值及最小值
+	int smax, int smin   // 捲動的最大及最小速度
+) {
+	svy=smin+(y-ymin)*(smax-smin)/(ymax-ymin);
+}

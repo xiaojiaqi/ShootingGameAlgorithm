@@ -1,0 +1,53 @@
+List3-11 在地上行走的自機動作
+//自機的狀態（步行、上昇、下降）
+typedef enum {
+	WALKING, JUMP_UP, JUMP_DOWN
+} MYSHIP_STATE;
+
+//自機的動作
+void Walk(
+	float& x, float& y,     //自機的座標
+	float speed,            //自機的速度
+	bool left, bool right,  //搖桿輸入（左右）
+	bool jump_button        //跳躍鈕的輸入
+) {
+	static MYSHIP_STATE state=WALKING;  //自機的狀態
+	static int time;                    //跳躍的時間
+	
+	//向左右移動
+	if (left ) x-=speed;
+	if (right) x+=speed;
+
+	//依狀態分歧
+	switch (state) {
+
+		//步行：
+		//按押跳躍鈕則進入上昇狀態。
+		case WALKING:
+			if (jump_button) {
+				state=JUMP_UP;
+				time=40;
+			}
+			break;
+		
+		//上昇：
+		//上升一段時間之後，則轉為下降狀態。
+		case JUMP_UP:
+			y-=speed;
+			if (time==0) {
+				state=JUMP_DOWN;
+				time=40;
+			} else time--;
+			break;
+		
+		//下降：
+		//下降一定時間後則恢復步行狀態。
+ //不使用一定時間的下降方法
+//而是先偵測自機腳下的狀態
+//當地面不存在時，則判定為掉落的方法
+		case JUMP_DOWN:
+			y+=speed;
+			if (time==0) state=WALKING; else time--;
+			break;
+	}
+}

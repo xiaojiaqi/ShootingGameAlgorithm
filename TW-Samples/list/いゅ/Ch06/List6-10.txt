@@ -1,0 +1,42 @@
+List6-10 複雜形狀的命中判定
+// 表示矩形命中判定範圍結構
+typedef struct {
+	float Left, Top, Right, Bottom;
+} HIT;
+
+// 表示複雜的命中判定範圍結構
+#define MAX_HIT 32
+typedef struct {
+	HIT* Hit[MAX_HIT];  // 矩形的命中判定範圍
+	int Num;            // 命中判定範圍的個數
+} COMPLEX_HIT;
+
+// 「矩形」對「矩形」的最基本命中判定處理
+bool IsHit(HIT* a, HIT* b) {
+	return
+		a->Left<b->Right && b->Left<a->Right && 
+		a->Top<b->Bottom && b->Top<a->Bottom;
+}
+
+// 「矩形」對「複雜形狀」的命中判定處理：
+// 對多數的矩形依序做命中判定處理，
+// 只要條件對某個矩形成立了，就判定「命中」了。
+bool IsHit(COMPLEX_HIT* a, HIT* b) {
+	for (int i=0; i<a->Num; i++) {
+		if (IsHit(a->Hit[i], b)) return true;
+	}
+	return false;
+}
+
+// 「複雜形狀」對「複雜形狀」的命中判定處理：
+// 對所有的組合依序做命中判定處理，
+// 只要條件對某個組合成立了，就判定「命中」了。
+bool IsHit(COMPLEX_HIT* a, COMPLEX_HIT* b) {
+	for (int i=0; i<a->Num; i++) {
+		for (int j=0; j<b->Num; j++) {
+			if (IsHit(a->Hit[i], b->Hit[j])) return true;
+		}
+	}
+	return false;
+}
+

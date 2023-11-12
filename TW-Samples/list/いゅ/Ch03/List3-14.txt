@@ -1,0 +1,40 @@
+List3-14 水中的移動（執行與水的命中判定時）
+void Underwater2(
+	float& x, float& y,        //自機的座標
+	float x0, float y0,        //自機的左上座標
+	float x1, float y1,        //自機的右下座標
+	float vx, float vy,        //自機的速度
+	float wx0[], float wy0[],  //與水的命中判定
+	float wx1[], float wy1[],  //（左上座標、右下座標）
+	int num_water              //與水的命中判定數
+) {
+	//偵測自機是否在水中
+	int i;
+	for (i=0; i<num_water; i++) {
+		if (wx0[i]<=x0 && x1<=wx1[i] && 
+			wy0[i]<=y0 && y1<=wy1[i]) break;
+	}
+	
+	// 自機在水中時：
+	// 速度變慢。這時速度是空中的一半。
+	if (i<num_water) {
+		x+=vx/2; y+=vy/2;
+	}
+	
+	//自機未在水中時：
+	//以一般速度移動
+	else {
+		x+=vx; y+=vy;
+		
+		//檢查自機是否接觸到水面
+		for (i=0; i<num_water; i++) {
+			if (wx0[i]<x1 && x0<wx1[i] && 
+				wy0[i]<y1 && y0<wy1[i]) break;
+		}
+
+		//自機接觸到水面時：
+		//顯示水面飛濺的特效。
+		//具體處理使用函數WaveEffect執行
+		if (i<num_water) WaveEffect();
+	}
+}

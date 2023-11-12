@@ -1,0 +1,27 @@
+List3-9 以物品來調節速度
+void SpeedControlByItem(
+	float& speed,          //速度
+	float max_speed,       //最高速
+	float min_speed,       //最低速
+	float x0, float y0,    //拾獲判定的左上座標
+	float x1, float y1,    //拾獲判定的右上座標
+	float ix0, float iy0,  //物品命中判定的左上座標
+	float ix1, float iy1,  //物品命中判定的右下座標
+	float accel            //速度增減的程度
+) {
+	//拾得物品時的處理：
+	//執行命中判定處理，當命中時，
+	//執行加速或減速。
+	if (ix0<x1 && x0<ix1 && iy0<y1 && y0<iy1) {
+		speed+=accel;
+		
+		//如果將它設定成下面這樣，
+		//就可以只要拾取一個減速物品，
+		//速度就能夠降到最低
+		// if (accel<0) speed=min_speed;
+		
+		//速度超過最高速或最低速時則施予修正
+		if (speed>max_speed) speed=max_speed;
+		if (speed<min_speed) speed=min_speed;
+	}
+}

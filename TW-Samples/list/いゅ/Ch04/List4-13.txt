@@ -1,0 +1,43 @@
+List4-13 鎖定雷射的發射
+//表示敵人的結構體 
+typedef struct {
+	bool Locked;  //是否被鎖定
+	float X, Y;   //座標
+} ENEMY_TYPE;
+#define MAX_ENEMIES 100
+static ENEMY_TYPE Enemy[MAX_ENEMIES];
+
+bool Hit(float x, float y, ENEMY_TYPE& enemy);
+void ShootLockOnLaser(ENEMY_TYPE& enemy);
+
+//能鎖定的數量
+static int AvailLocks=8;
+
+//發射鎖定雷射
+void LockOnLaser(
+	float sx, float sy,  //描準器的座標
+	bool button      //按鈕的狀態（按下按鈕時為true）
+) {
+	//能鎖定的數量為1以上時：
+	//執行全部敵人與描準器的命中判定處理，
+	//與描準器重疊的敵人，則加上鎖定記號。
+	//命中判定的具體處理以Hit函數來執行。
+	for (int i=0; AvailLocks>0 && i<MAX_ENEMIES; i++) {
+		if (!Enemy[i].Locked && Hit(sx, sy, Enemy[i])) {
+			Enemy[i].Locked=true;
+
+			//減少可鎖定的數量：
+			//雷射命中敵人，就增加可鎖定的數量
+			AvailLocks--;
+		}
+	}
+
+	//按下按鈕時：
+	//對有鎖定記號的所有敵人發射雷射，
+	//發射的具體處理是以ShootLockOnLaser函數來執行。
+	if (button) {
+		for (int i=0; i<MAX_ENEMIES; i++) {
+			if (Enemy[i].Locked) ShootLockOnLaser(Enemy[i]);
+		}
+	}
+}

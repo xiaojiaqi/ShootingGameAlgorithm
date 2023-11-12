@@ -1,0 +1,16 @@
+List4-1 基本的射擊操作
+void BasicShot(
+	bool button  //本次的按鈕狀態（被按押時為true）
+) {
+	//上次按鈕狀態（被按押時true）
+	static bool prev_button=false;
+	
+	//發射子彈：
+	//上次未按下按鈕，只有此次被按押時，
+	//發射子彈。
+	//發射時的細部處理以shot函數來執行
+	if (!prev_button && button) Shot();
+	
+	//儲存此次按鈕的狀態
+	prev_button=button;
+}

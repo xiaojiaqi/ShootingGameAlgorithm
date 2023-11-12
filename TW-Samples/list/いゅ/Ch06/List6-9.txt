@@ -1,0 +1,41 @@
+List6-9  編隊的出現
+#include <stdlib.h>
+
+//敵機的間隔
+#define INTERVAL 6
+
+// 敵機的資訊(結構體)
+typedef struct ENEMY_STRUCT {
+	float X, Y;                 // 現在的座標
+	float OldX[INTERVAL];       // 舊的X座標
+	float OldY[INTERVAL];       // 舊的Y座標
+	int Index;                  // 指向最舊座標的index
+	struct ENEMY_STRUCT* Prec;  // 前一架敵機
+} ENEMY;
+
+// 編隊的產生
+void eFormation(
+	float x, float y,  // 產生地點的座標
+	int count          // 組成編隊的敵機數量
+) {
+	ENEMY* enemy;      // 指向表示敵機結構體的指標
+	ENEMY* prec=NULL;  // 指向前一架敵機的指標
+	
+	// 製作組成編隊的敵機：
+	// 建立敵機的結構，並初始化座標。
+	// 關於建立構造的具體處理移至NewEnemyType函數處理。
+	for (int i=0; i<count; i++, prec=enemy) {
+		enemy=NewEnemyType();
+		enemy->X=x;
+		enemy->Y=y;
+		for (int j=0; j<INTERVAL; j++) {
+			enemy->OldX[j]=x;
+			enemy->OldY[j]=y;
+		}
+		enemy->Index=0;
+
+		// 除了前頭以外的敵機都參照前一架敵機來移動
+		// 而前端的敵機則參照NULL。
+		enemy->Prec=prec;
+	}
+}

@@ -1,0 +1,21 @@
+List7-4 強制縱向捲軸+限定橫向捲軸
+void MixedScroll(
+	int x, int y,  // 自機在背景上的座標
+	int w,         // 自機的寬度
+	int sy,        // 捲動位置的Y座標
+	int svy,       // Y方向的捲動速度
+	int sw,        // 畫面寬度
+	int bw         // 背景的寬度
+) {
+	// 描繪背景：
+	// 更新捲動位置，並描繪背景。
+	// 關於描繪的具體處理移至DrawBG函數處理。
+	int sx=(bw-sw)*x/(bw-w);
+	sy+=svy;
+	DrawBG(sx, sy);
+	
+	// 描繪自機：
+	// 將自機描繪在捲動位置起算的相對位置
+	// 關於描繪的具體處理移至DrawMyShip函數處理。
+	DrawMyShip(x-sx, y-sy);
+}

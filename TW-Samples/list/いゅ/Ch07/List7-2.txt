@@ -1,0 +1,15 @@
+List7-2 多重捲軸
+void OverlaidScroll(
+	int num_bg,           // 背景的數量
+	int sx[], int sy[],   // 各背景上的顯示位置
+	int svx[], int svy[]  // 各背景上的捲動速度
+) {
+	// 描繪全背景:
+	// 將各背景的顯示位置依序更新之後再顯示
+	// 關於顯示的具體處理移至DrawBG函數處理。
+	for (int i=0; i<num_bg; i++) {
+		sx[i]+=svx[i];
+		sy[i]+=svy[i];
+		DrawBG(i);
+	}
+}

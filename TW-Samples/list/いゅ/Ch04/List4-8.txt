@@ -1,0 +1,90 @@
+List4-8指令射擊
+//======================================================= (1)
+//表示搖桿與按鈕狀態的常數：
+//也可以用兩個以上的常數組合。
+//例如「左上」，
+//「上」與「左」的組合以（UP|LEFT）來表示。
+#define NONE     0  //初期狀態
+#define NEUTRAL  1  //中間
+#define UP       2  //上
+#define DOWN     4  //下
+#define LEFT     8  //左
+#define RIGHT   16  //右
+#define BUTTON  32  //按鈕
+
+//輸入歷程的個數、輸入歷程
+#define NUM_HISTORY 30
+static int History[NUM_HISTORY];
+
+//指令
+typedef struct {
+	int Length;              //指令的長度
+	int Limit;               //輸入時間的限制
+	int Input[NUM_HISTORY];  //輸入內容
+} COMMAND_TYPE;
+#define NUM_COMMAND 2
+COMMAND_TYPE Command[NUM_COMMAND];
+
+//======================================================== (2)
+//輸入歷程與指令的初始化
+void InitCommandShot()
+{
+	//輸入履歷的初始化
+	for (int i=0; i<NUM_HISTORY; i++) History[i]=NONE;
+
+	//指令1（波動拳指令）
+	Command[0].Length=4;
+	Command[0].Limit=30;
+	Command[0].Input[0]=DOWN;
+	Command[0].Input[1]=DOWN|RIGHT;
+	Command[0].Input[2]=RIGHT;
+	Command[0].Input[3]=BUTTON;
+
+	//指令2（昇龍拳指令）
+	Command[1].Length=4;
+	Command[1].Limit=30;
+	Command[1].Input[0]=RIGHT;
+	Command[1].Input[1]=DOWN;
+	Command[1].Input[2]=DOWN|RIGHT;
+	Command[1].Input[3]=BUTTON;
+}
+
+//======================================================= (3)
+//執行指令射擊判定的函數
+void CommandShot(
+	bool up, bool down,     //搖桿狀態（上下左右）
+	bool left, bool right,  
+	bool button             //按鈕的狀態（按下時為true）
+) {
+	//輸入歷程的記錄位置
+	static int index=0;
+	
+	//將輸入記錄在歷程當中
+	History[index]=
+		(up?UP:0)|(down?DOWN:0)|
+		(left?LEFT:0)|(right?RIGHT:0)|
+		(button?BUTTON:0);
+
+	//判定各指令是否被輸入
+	int c, j, i;
+	for (c=0; c<NUM_COMMAND; c++) {
+		for (i=0, j=Command[c].Length-1; j>=0; j--) {
+			for (; i<Command[c].Limit; i++) {
+				if (History[(index-i+NUM_HISTORY)
+					%NUM_HISTORY]==Command[c].Input[j]) break;
+			}
+			if (i==Command[c].Limit) break;
+		}
+		
+		//完成確認指令的輸入：
+		//執行指令射擊，清除歷程。
+		//具體處理以ComShot函數執行。
+		if (j==-1) {
+			ComShot(j);
+			for (i=0; i<NUM_HISTORY; i++) History[i]=NONE;
+		}
+	}
+	
+	//更新記錄的位置
+	index=(index+1)%NUM_HISTORY;
+}

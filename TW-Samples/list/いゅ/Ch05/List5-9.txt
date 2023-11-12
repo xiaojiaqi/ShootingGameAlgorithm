@@ -1,0 +1,32 @@
+List5-9 被投擲出去的敵機動作
+void MoveThrownEnemy(
+	float& x0, float& y0,      //被投擲敵機的左上座標
+	float& x1, float& y1,      //被投擲敵機的右下座標
+	float vx, float vy,        //被投擲敵機的速度
+	float ex0[], float ey0[],  //其它敵機的左上座標
+	float ex1[], float ey1[],  //其它敵機的右下座標
+	int num_enemy              //其它敵機的數量
+) {
+	//與敵機的命中判定處理：
+	//被投擲敵機與其它全部的敵機之間
+	//執行命中判定處理。
+	//若產生撞擊，則消去被投擲的敵機，
+	//取而代之的是爆風。
+	//消滅與出現的具體處理，
+	//是以DeleteEnemy、CreateExplosion的各種函數來執行。
+	int i;
+	for (i=0; i<num_enemy; i++) {
+		if (ex0[i]<x1 && x0<ex1[i] && 
+			ey0[i]<y1 && y0<ey1[i]) {
+			DeleteEnemy(i);
+			CreateExplosion(x0, y0);
+		}
+	}
+	
+	//未與任何敵機撞擊時：
+	//移動被投擲的敵機。
+	if (i==num_enemy) {
+		x0+=vx; y0+=vy;
+		x1+=vx; y1+=vy;
+	}
+}

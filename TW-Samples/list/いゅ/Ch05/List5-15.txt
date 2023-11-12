@@ -1,0 +1,42 @@
+List5-15 改變自機顏色來吸收敵彈
+void SwitchColors(
+	bool color_button,   // 換色按鈕的狀態
+	bool shot_button,    // 射擊按鈕的狀態
+	int num_bullet,      // 子彈數量
+	bool bullet_color[]  // 子彈顏色
+) {
+	static bool prev_col_button=false;  // 上次的按鈕狀態
+	static bool color=true;             // 自機顏色
+	static int energy=0;                // 能量值
+	
+	// 切換顏色
+	if (!prev_col_button && color_button) color=~color;
+	prev_col_button=color_button;
+	
+	// 發射子彈：
+	// 發射和自機相同顏色的子彈。
+	// 關於射擊的具體處理部分移至Shot函數進行。
+	if (shot_button) Shot(color);
+	
+	// 與敵彈間的命中判定處理：
+	// 判定的具體處理移至HitBullet函數處理。
+	for (int i=0; i<num_bullet; i++) {
+		if (HitBullet(i)) {
+			
+			// 同色則吸收:
+			// 刪除敵彈，並增加能量值。
+			// 關於刪除的具體處理移至DeleteBullet函數處理。
+			if (color==bullet_color[i]) {
+				DeleteBullet(i);
+				energy++;
+			}
+			
+			// 若不同色則判定失誤：
+			// 關於失誤的具體處理移至Miss函數處理
+			else {
+				Miss();
+			}
+		}
+	}
+}
+

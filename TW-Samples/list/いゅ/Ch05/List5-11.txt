@@ -1,0 +1,42 @@
+List5-11 捉住自機的敵機動作
+//敵機的狀態 
+//一般、捕捉
+typedef enum {
+	NORMAL, CAPTURED
+} CAPTOR_STATE;
+
+//捕捉自機的敵機動作
+void Captor(
+	bool capture  //此次是否要執行捕捉攻擊
+) {
+	static int state=NORMAL;  //敵機的狀態
+	
+	//依狀態分歧
+	switch (state) {
+		
+		//一般狀態：
+		//一般攻擊或執行捕捉攻擊
+		//捕捉攻擊如果成功，則移轉至捕捉狀態。
+		//攻擊的具體處理是以CaptureAttack、NormalAttack的各函數來執行。
+		case NORMAL:
+			if (capture) {
+				if (CaptureAttack()) state=CAPTURED;
+			} else {
+				NormalAttack();
+			}
+			break;
+		
+		//捕捉狀態：
+		//執行一般的攻擊。
+		//被破壞時，則吐出自機後消滅。
+		//判定等的具體處理是以Destroyed、ReturnMyShip、Delete的各函數來執行。
+		case CAPTURED:
+			NormalAttack();
+			if (Destroyed()) {
+				ReturnMyShip();
+				Delete();
+			}
+			break;
+	}
+}
+

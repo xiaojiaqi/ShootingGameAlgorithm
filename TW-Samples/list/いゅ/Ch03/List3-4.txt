@@ -1,0 +1,24 @@
+List3-4使用3D圖形來執行滾轉的程式
+void RollMyShip3D(
+	int& roll,             //滾轉的角度
+	bool left, bool right  //朝向左右方向的搖桿輸入
+) {
+	//用搖桿輸入左的時候
+	// -60<roll時則roll -3
+	if (left && -60<roll) roll-=3;
+
+	//用搖桿輸入右時
+	// roll<60時，則roll +3
+	if (right && roll<60) roll+=3;
+
+	//搖桿不向左也不向右輸入時：
+	//使 roll往0趨近
+	if (!left && !right) {
+		if (roll<0) roll+=3; else
+		if (0<roll) roll-=3;
+	}
+
+	//依roll值讓自機旋轉顯示
+	//顯示的具體處理由Draw函數來執行
+	Draw(roll);
+}

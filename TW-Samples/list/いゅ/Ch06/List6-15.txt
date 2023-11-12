@@ -1,0 +1,40 @@
+List6-15 觸手
+#include <math.h>
+
+void MoveTentacle(
+	float x[], float y[],  // 各零件的座標
+	int num_part,          // 零件的數目
+	float tx, float ty,    // 目標的座標
+	float v,               // 前端移動的速度
+	float limit,           // 前端和根部的最大距離
+	int num_loop           // 重覆計算的次數
+) {
+	// 前端的座標和根部的座標
+	float hx=x[0], hy=y[0];
+	float rx=x[num_part-1], ry=y[num_part-1];
+
+	// 將前端往目標方向移動
+	hx+=(tx>=hx+v ? v : (tx<=hx-v ? -v : 0));
+	hy+=(ty>=hy+v ? v : (ty<=hy-v ? -v : 0));
+
+	// 限制前端的移動範圍：
+	// 若前端和根部的距離超過極限值，則調回到移動可能範圍內。
+	float dx=hx-rx, dy=hy-ry;
+	float d=sqrt(dx*dx+dy*dy);
+	if (d>limit) {
+		hx=dx*limit/d+rx;
+		hy=dy*limit/d+ry;
+	}
+
+	// 計算中間部分的座標：
+	// 算出相鄰部分的座標的平均值。由前端往根部方向計算。
+	// 視需要做重覆計算。
+	x[0]=hx; y[0]=hy;
+	for (int l=0; l<num_loop; l++) {
+		for (int i=1; i<num_part-1; i++) {
+			x[i]=(x[i-1]+x[i+1])/2;
+			y[i]=(y[i-1]+y[i+1])/2;
+		}
+	}
+}
+

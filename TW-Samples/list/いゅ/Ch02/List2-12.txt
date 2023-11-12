@@ -1,0 +1,30 @@
+List2-12初始化使用位置表單的方向彈
+void InitDirectedBulletDDA2(
+	int theta,         //發射角度
+	int ex, int ey,    //敵機座標
+	int& x, int& y,    //子彈座標
+	int& vx, int& vy,  //子彈移動方向
+	int& dx, int& dy,  // X方向與Y方向的差分
+	int& diff          //誤差
+) {
+	//從表單讀出虛擬自機的位置
+	int dir=(theta%360+360)%360;
+	int mx=mpos[dir][0];
+	int my=mpos[dir][1];
+
+	//然後和使用DDA讓子彈發射向自機方向的處理相同
+
+	//設定子彈的座標
+	x=ex; y=ey;
+
+	//求取子彈的移動方向(vx,vy)：值為1或-1
+	vx=mx>ex?1:-1;
+	vy=my>ey?1:-1;
+
+	//求取相對於目標的X方向與Y方向差分之絕對值(dx,dy)
+	dx=mx>=ex?mx-ex:ex-mx;
+	dy=my>=ey?my-ey:ey-my;
+
+	//誤差diff：dx>=dy時為dx/2；dx<dy時為dy/2
+	diff=dx>=dy?dx/2:dy/2;
+}

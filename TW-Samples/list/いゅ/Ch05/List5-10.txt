@@ -1,0 +1,54 @@
+List5-10 ÅÜ¦¨¤Í¾÷ªº¼Ä¾÷°Ê§@
+void CapturedEnemy(
+	float& x0, float& y0,      //¼Ä¾÷ÅÜ¦¨¤Í¾÷«áªº¥ª¤W®y¼Ð
+	float& x1, float& y1,      //¼Ä¾÷ÅÜ¦¨¤Í¾÷«áªº¥k¤U®y¼Ð
+	float ex0[], float ey0[],  //¨ä¥¦¼Ä¾÷ªº¥ª¤W®y¼Ð
+	float ex1[], float ey1[],  //¨ä¥¦¼Ä¾÷ªº¥k¤U®y¼Ð
+	int num_enemy,             //¨ä¥¦¼Ä¾÷ªº¼Æ¶q
+	float bx0[], float by0[],  //¤l¼uªº¥ª¤W®y¼Ð
+	float bx1[], float by1[],  //¤l¼uªº¥k¤U®y¼Ð ’e
+	int num_bullet,            //¤l¼uªº¼Æ¶q
+	bool button                //®gÀ»«ö¶sªºª¬ºA
+) {
+	static int damage;         //²{¦bªº·l¶Ë
+	static int max_damage=40;  //·l¶Ëªº·¥­­­È
+
+	//»P¼Ä¾÷ªº©R¤¤§P©w³B²z¡G
+	//»P¼Ä¾÷¼²À»«hµ¹»P¼Ä¾÷·l¶Ë¡A
+	//¦Û¤v¤]¨ü¨ì·l¶Ë¡C
+	//½á¤©·l¶Ëªº¨ãÅé³B²z¡G
+	//¥HDamageEnemyªº¨ç¼Æ¨Ó°õ¦æ¡C
+	for (int i=0; i<num_enemy; i++) {
+		if (ex0[i]<x1 && x0<ex1[i] && 
+			ey0[i]<y1 && y0<ey1[i]) {
+			DamageEnemy(i);
+			damage++;
+		}
+	}
+	
+	//»P¼Ä¼uªº©R¤¤§P©w³B²z¡G
+	//»P¼Ä¼u¼²À»«h®ø¥h¼Ä¼u¡A
+	//¦Û¤v¤]¨ü·l¡C
+	//®ø¥hªº¨ãÅé³B²z¡A
+	//¬O¥HDeleteBullet¨ç¼Æ¨Ó°õ¦æ¡C
+	for (int i=0; i<num_bullet; i++) {
+		if (bx0[i]<x1 && x0<bx1[i] && 
+			by0[i]<y1 && y0<by1[i]) {
+			DeleteBullet(i);
+			damage++;
+		}
+	}
+	
+	//´©§U®gÀ»¡G
+	//°t¦X¦Û¾÷ªº®gÀ»¾Þ§@¥[¥H®gÀ»¡C
+	//µo®gªº¨ãÅé³B²z¬O¥HShot¨ç¼Æ¨Ó°õ¦æ¡C
+	//¦¹¥~¡A¤£¥²¾Þ§@«ö¶s
+        //¤]¥i¥H¦Û°Ê°õ¦æ´©§U®gÀ»ªº¤èªk¡C
+        if (button) Shot();
+
+	//·l¶Ë§P©w¡G
+	//·l¶Ë²Ö¿n¦Ü·¥­­­È®É«h§P©w®ø·À¡C
+	//®ø·Àªº¨ãÅé³B²z¡A
+	//¬O¥HDeleteCapturedEnemy¨ç¼Æ¨Ó°õ¦æ¡C
+	if (damage>=max_damage) DeleteCapturedEnemy();
+}

@@ -1,0 +1,45 @@
+List8-2 重播
+// 表示搖捍和按鈕輸入的常數：
+// 將各輸入用1個位元來表示
+enum {
+	UP=1, DOWN=2, LEFT=4, RIGHT=8,
+	BUTTON1=16, BUTTON2=32
+} INPUT;
+
+// 儲存重播資料的結構(struct):
+// 裡面儲存了搖捍和按鈕的輸入資料。
+#define MAX_TIME 10000
+typedef struct {
+	char Input[MAX_TIME];
+} REPLAY_DATA;
+
+// 移動自機
+void MoveMyShip(
+	char input,                // 搖捍和按鈕的輸入
+	bool is_replay,            // 若是重播中的話設為true
+	REPLAY_DATA* replay_data,  // 重播資料
+	int& time                  // 計時器
+) {
+	// 重播的處理:
+	// 若是在重播中的話就從重播資料讀出輸入資料
+	// 若不是重播中的話就將輸入資料存到重橎資料裡
+	if (is_replay) {
+		input=replay_data->Input[time];
+	} else {
+		replay_data->Input[time]=input;
+	}
+	
+	// 遞增計時器數值
+	time++;
+
+	// 根據輸入來移動自機:
+	// 關於移動和射擊的具體處理移至
+	// MoveUp，MoveDown，MoveLeft，MoveRight，
+	// Shot，Laser各函數處理
+	if (input&UP   ) MoveUp();
+	if (input&DOWN ) MoveDown();
+	if (input&LEFT ) MoveLeft();
+	if (input&RIGHT) MoveRight();
+	if (input&BUTTON1) Shot();
+	if (input&BUTTON2) Laser();
+}

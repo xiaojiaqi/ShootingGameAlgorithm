@@ -1,0 +1,44 @@
+List5-21 同時操作自機和瞄準器
+#include <math.h>
+
+void Shot(float x, float y, float vx, float vy);
+
+void MoveSight2(
+	float& x, float& y,       // 自機的座標
+	float speed,              // 自機的速度
+	bool up1, bool down1,     // 自機用的搖捍輸入1(上下)
+	bool left1, bool right1,  // 自機用的搖捍輸入1(左右)
+	float& sx, float& sy,     // 瞄準器的座標
+	float sight_speed,        // 瞄準器的速度
+	bool up2, bool down2,     // 瞄準器用的搖捍輸入2(上下)
+	bool left2, bool right2,  // 瞄準器用的搖捍輸入2(左右)
+	bool button,              // 發射鈕的輸入
+	float shot_speed          // 子彈的速度
+) {
+	// 移動自機
+	if (up1   ) y-=speed;
+	if (down1 ) y+=speed;
+	if (left1 ) x-=speed;
+	if (right1) x+=speed;
+
+	// 移動瞄準器
+	if (up2   ) sy-=sight_speed;
+	if (down2 ) sy+=sight_speed;
+	if (left2 ) sx-=sight_speed;
+	if (right2) sx+=sight_speed;
+
+	// 發射子彈：
+	// 若玩家按下發射鈕，
+	// 則從自機往瞄準器發射子彈。
+	// 關於發射的具體處理移至Shot函數處理。
+	// 另外，嚴格來說應該要做d=0時的處理。
+	if (button) {
+		float vx=sx-x, vy=sy-y;
+		if (vx!=0 || vy!=0) {
+			float d=sqrt(vx*vx+vy*vy);
+			vx*=shot_speed/d;
+			vy*=shot_speed/d;
+			Shot(x, y, vx, vy);
+		}
+	}
+}

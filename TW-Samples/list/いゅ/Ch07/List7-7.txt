@@ -1,0 +1,9 @@
+List7-7 捲動以及對自機施力
+void ScrollForce(
+	int& x, int& y,   // 自機的座標
+	int vx, int vy,   // 自機的速度
+	int svx, int svy  // 捲動的速度
+) {
+	x+=vx+svx/2;
+	y+=vy+svy/2;
+}

@@ -1,0 +1,34 @@
+List5-17 使自機和敵機的雷射相撞
+void LaserCollision(
+	float mx0[], float my0[],  // 自機雷射一部分的左上座標
+	float mx1[], float my1[],  // 自機雷射一部分的左上座標
+	int num_my_lasers,         // 自機雷射部分的數量
+	float ex0[], float ey0[],  // 敵機雷射一部分的左上座標
+	float ex1[], float ey1[],  // 敵機雷射一部分的右下座標
+	int num_enemy_lasers       // 敵機雷射部分的數量
+) {
+	static int energy=0;        // 能量值
+	static int min_energy=100;  // 攻擊發生所需的能量值
+	
+	// 雷射之間的命中判定處理：
+	// 若自機雷射和敵機雷射兩者的某部分相碰，
+	// 就消除這兩部分，並增加能量值。
+	// 關於刪除的具體處理移至DeleteMyLaser，
+	// 和DeleteEnemyLaser函數來處理
+	for (int i=0; i<num_my_lasers; i++) {
+		for (int j=0; j<num_enemy_lasers; j++) {
+			if (ex0[j]<mx1[i] && mx0[i]<ex1[j] && 
+				ey0[j]<my1[i] && my0[i]<ey1[j]) {
+				DeleteMyLaser(i);
+				DeleteEnemyLaser(j);
+				energy++;
+			}
+		}
+	}
+	
+	// 攻擊的發生：
+	// 若能量值已經到了必須量，
+	// 則產生強力的攻擊。
+	// 強力攻擊發生的具體處理移至SpecialAttack函數來處理。
+	if (energy>=min_energy) SpecialAttack();
+}

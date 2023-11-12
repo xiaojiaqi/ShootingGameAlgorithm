@@ -1,0 +1,43 @@
+List5-2 近身攻擊
+//與近身攻擊相關的處理
+void Punch(
+	bool button,               //按鈕的狀態（按押時為true）
+	float px0, float py0,      //近身攻擊的左上座標
+	float px1, float py1,      //近身攻擊的右下座標
+	float ex0[], float ey0[],  //敵機的左上座標
+	float ex1[], float ey1[],  //敵機的右下座標
+	int num_enemy              //敵機的數量
+) {
+	static bool punching=false;  //是否為近身攻擊中
+	static int punch_time;       //近身攻擊的執行時間
+	
+	//近身攻擊開始：
+	//非處於近身攻擊中，只要按下按鈕，
+	//就會發出近身攻擊。
+	if (!punching && button) {
+		punching=true;
+		punch_time=30;
+	}
+	
+	//近身攻擊中的處理
+	if (punching) {
+
+		//與敵機的命中處理：
+		//給予損傷的具體處理
+		//是以DamageEnemy函數來執行。
+		for (int i=0; i<num_enemy; i++) {
+			if (ex0[i]<px1 && px0<ex1[i] && 
+				ey0[i]<py1 && py0<ey1[i]) {
+				DamageEnemy(i);
+			}
+		}
+
+		//近身攻擊的顯示：
+		//在顯示上具體的處理是以DrawPunch函數來執行。
+		DrawPunch();
+
+		//近身攻擊的持續與結束：
+		//過了持續時間就收回近身攻擊。
+		if (punch_time==0) punching=false; else punch_time--;
+	}
+}

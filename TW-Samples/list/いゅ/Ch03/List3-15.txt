@@ -1,0 +1,32 @@
+List3-15使用計量表來提昇能力
+//提昇能力的種類
+typedef enum {
+	NONE,  //沒有游標的狀態
+	SPEED, MISSILE, DOUBLE, 
+	LASER, OPTION, BARRIER, 
+	END    //顯示計量表的右端
+} POWER_UP_TYPE;
+
+//使用計量表來提昇能力
+void PowerUpGauge(
+	bool power_up_button  //能力提昇鈕的輸入
+) {
+	static POWER_UP_TYPE cursor=NONE;  //游標的位置
+	
+	//拾取物品時的處理：
+	//物品拾取時，游標往右移1格。
+	//移至右端，則恢復到最左端。
+	//物品拾獲判定處理是以PickItem函數來執行
+	if (PickItem()) {
+		cursor++;
+		if (cursor==END) cursor=SPEED;
+	}
+	
+	//能力提昇的處理：
+	//如果按下按鈕。
+	//則執行游標所指的能力提昇。
+	//具體的處理以函數PowerUp來執行
+	if (power_up_button) {
+		PowerUp(cursor);
+	}
+}

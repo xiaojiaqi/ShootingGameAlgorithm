@@ -1,0 +1,20 @@
+List5-13 有友機在的方向，射出子彈威力較強
+#include <math.h>
+
+void SpecialShot(float x, float y, float vx, float vy);
+
+void ReinforcedShot2(
+	float x, float y,    //自機的座標
+	float cx, float cy,  //友機的座標
+	float speed          //射擊的速度
+) {
+	//求取射擊的速度
+	float vx=x-cx, vy=y-cy;
+	float d=sqrt(vx*vx+vy*vy);
+	vx*=speed/d;
+	vy*=speed/d;
+
+	//發射子彈
+	//發射的具體處理是以SpecialShot函數來執行。
+	SpecialShot(x, y, vx, vy);
+}

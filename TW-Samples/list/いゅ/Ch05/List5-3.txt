@@ -1,0 +1,26 @@
+List5-3 誘爆
+void InducedExplosion(
+	float ex0[], float ey0[],  //敵機的左上座標
+	float ex1[], float ey1[],  //敵機的右下座標
+	int num_enemy,             //敵機的數量
+	float x0[], float y0[],    //爆風的左上座標
+	float x1[], float y1[],    //爆風的右下座標
+	int num_explosion          //爆風的數量
+) {
+	//敵機與爆風的命中判定處理：
+	//所有的敵機與爆風之間都要命中判定處理，
+	//敵機被爆風擊中則遭破壞。
+	//然後在與敵機相同座標再產生新爆風
+	//破壞跟產生的具體處理，
+	//是以DestroyEnemy與CreateExplosion函數來執行。
+	for (int i=0; i<num_enemy; i++) {
+		for (int j=0; j<num_explosion; j++) {
+			if (ex0[i]<x1[j] && x0[j]<ex1[i] && 
+				ey0[i]<y1[j] && y0[j]<ey1[i]) {
+				DestroyEnemy(i);
+				CreateExplosion(ex0[i], ey0[i]);
+			}
+		}
+	}
+}
+

@@ -1,0 +1,32 @@
+List2-10初始化使用DDA的方向彈
+#include <math.h>
+
+void InitDirectedBulletDDA(
+	int theta,         //發射角度
+	int ex, int ey,    // 敵機座標
+	int& x, int& y,    //子彈座標
+	int& vx, int& vy,  //子彈移動方向
+	int& dx, int& dy,  // X方向與Y方向的差分
+	int& diff          //誤差
+) {
+	// 在遠處配置虛擬自機
+	// M_PI為圓周率
+	int mx=cos(M_PI/180*theta)*1000;
+	int my=sin(M_PI/180*theta)*1000;
+
+	//之後與使用DDA子彈處置方式相同
+
+	//設定子彈座標
+	x=ex; y=ey;
+
+	//求取子彈移動方向(vx,vy)：值為1或-1
+	vx=mx>ex?1:-1;
+	vy=my>ey?1:-1;
+
+	//求取對於目標X方向與Y方向差分的絕對值(dx,dy)
+	dx=mx>=ex?mx-ex:ex-mx;
+	dy=my>=ey?my-ey:ey-my;
+
+	//誤差diff：dx>=dy時為dx/2，dx<dy時為dy/2
+	diff=dx>=dy?dx/2:dy/2;
+}

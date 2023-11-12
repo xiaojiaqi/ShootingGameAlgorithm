@@ -1,0 +1,39 @@
+List5-1 炸彈
+void Bomb(
+	int& bomb_time,             //炸彈的有效時間
+	float x0, float y0,        //炸彈有效範圍的左上座標
+	float x1, float y1,        //炸彈有效範圍的右下座標
+	float bx0[], float by0[],  //敵彈的左上座標
+	float bx1[], float by1[],  //敵彈的右下座標
+	int num_bullet,            //敵彈的數量
+	float ex0[], float ey0[],  //敵機的左上座標
+	float ex1[], float ey1[],  //敵機的右下座標
+	int num_enemy              //敵機的數量
+) {
+	//炸彈有效時的處理
+	if (bomb_time>0) {
+	
+		//消除敵機子彈：
+		//消除的具體處理，
+		//是以DeleteBullet函數來執行。
+		for (int i=0; i<num_bullet; i++) {
+			if (bx0[i]<x1 && x0<bx1[i] && 
+				by0[i]<y1 && y0<by1[i]) {
+				DeleteBullet(i);
+			}
+		}
+
+		//給予敵機損傷：
+		//給予敵機損傷的具體處理，
+		//是以DamageEnemy函數來執行。
+		for (int i=0; i<num_enemy; i++) {
+			if (ex0[i]<x1 && x0<ex1[i] && 
+				ey0[i]<y1 && y0<ey1[i]) {
+				DamageEnemy(i);
+			}
+		}
+	
+		//減少炸彈的有效時間
+		bomb_time--;
+	}
+}

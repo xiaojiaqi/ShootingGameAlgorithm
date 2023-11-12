@@ -1,0 +1,9 @@
+List2-2 瞄準彈的移動
+void MoveAimingBullet(
+	float& x, float& y,  //子彈座標
+	float vx, float vy   //子彈速度
+) {
+	//在子彈的座標(x,y)上，加上速度(vx,vy)
+	x+=vx;
+	y+=vy;
+}

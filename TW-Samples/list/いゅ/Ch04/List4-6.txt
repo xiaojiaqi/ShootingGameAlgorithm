@@ -1,0 +1,44 @@
+List4-6 連續射擊與雷射共存
+void ShotAndLaser(
+	bool button,    //按鈕的狀態（按下時為true）
+	int min_power,  //累積能量的最小值
+	int max_gauge   //連續射擊計量表的最大值
+) {
+	//累積能量、連續射擊計量表
+	static int power=0, gauge=0;
+
+	//按下按鈕時
+	if (button) {
+		
+		//累積能量不足時：
+		//增加累積能量，使連續射擊計量表為最大，
+		//發射子彈。具體處理是以Shot函數來執行。
+		if (power<min_power) {
+			power++;
+			gauge=max_gauge;
+			Shot();
+		}
+	
+		//累積能量足夠時：
+		//使連續射擊計量表為0，發射雷射。
+		//具體處理是以Laser函數來執行。
+		else {
+			gauge=0;
+			Laser();
+		}
+	}
+	
+	//放開按鈕時：
+	else {
+		
+		//連續射擊計量表>0時： 
+		//發射一般子彈，將連續射擊計量表-1。
+		if (gauge>0) {
+			Shot();
+			gauge--;
+		}
+
+		//使累積能量為0。
+		power=0;
+	}
+}

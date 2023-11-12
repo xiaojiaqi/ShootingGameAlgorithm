@@ -1,0 +1,18 @@
+List4-9 子彈的移動
+void DeleteShot();
+
+void MoveShot(
+	float& x0, float& y0,  //子彈的左上座標
+	float& x1, float& y1,  //子彈的右下座標
+	float vx, float vy,    //子彈的速度（X方向,Y方向）
+	float sx0, float sy0,  //畫面框的左上座標
+	float sx1, float sy1   //畫面框的右下座標
+) {
+	//子彈射出畫面就把它消除：
+	//具體處理是以DeleteShot函數來執行。
+	if (x1<=sx0 || sx1<=x0 || y1<=sy0 || sy1<=y0) DeleteShot();
+
+	//移動子彈（更新座標）
+	x0+=vx; y0+=vy;
+	x1+=vx; y1+=vy;
+}

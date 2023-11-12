@@ -1,0 +1,12 @@
+List3-1自機的移動
+void MoveMyShip(
+	float& x, float& y,    //自機的座標（X方向，Y方向）
+	float speed,           //自機的速度
+	bool up, bool down,    //朝上下方向的搖桿輸入
+	bool left, bool right  //朝左右方向的搖桿輸入
+) {
+	if (up   ) y-=speed;
+	if (down ) y+=speed;
+	if (left ) x-=speed;
+	if (right) x+=speed;
+}

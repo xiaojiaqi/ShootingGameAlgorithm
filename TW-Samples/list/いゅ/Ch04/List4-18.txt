@@ -1,0 +1,42 @@
+List4-18 ¤Á´«¤è¦Vªº¥ş¤è¦ì®gÀ»
+#include <math.h>
+
+void TurnMarker(
+	float& x, float& y,     //¦Û¾÷ªº®y¼Ğ
+	float speed,            //¦Û¾÷ªº³t«×
+	bool left, bool right,  //·n±ìªºª¬ºA¡]¥ª¥kª¬ºA¡^
+	bool up, bool down,     //·n±ìªºª¬ºA¡]¤W¤U¤è¦V¡^
+	bool turn_button,       //±ÛÂà«ö¶sªºª¬ºA
+	bool shot_button        //®gÀ»«ö¶sªºª¬ºA
+) {
+	static bool turning;        //±ÛÂà¤¤¬°true
+	static float mx, my;        //turn makerªº®y¼Ğ[‚ÌÀ•W
+	static float rad=M_PI*3/2;  //±ÛÂà¨¤«×¡]M_PI¬°¶ê©P²v¡^
+	static float d=10;          //¦Û¾÷¹ïturn makerªº¶ZÂ÷
+	
+	//±ÛÂà¶}©l¡G
+	//ºâ¥Xturn makerªº®y¼Ğ¡C
+	if (!turning && turn_button) {
+		turning=true;
+		mx=x-d*cos(rad);
+		my=y-d*sin(rad);
+	}
+	
+	//±ÛÂàµ²§ô
+	if (!turn_button) turning=false;
+	
+	//¦Û¾÷ªº²¾°Ê
+	if (up   ) y-=speed;
+	if (down ) y+=speed;
+	if (left ) x-=speed;
+	if (right) x+=speed;
+	
+	//­Y¬°±ÛÂà¤¤«h­pºâ±ÛÂà¨¤«×
+	if (turning) rad=-atan2(x-mx, y-my);
+	
+	//¤l¼uªºµo®g¡G
+	//´Â¦Û¾÷©Ò´Âªº¤è¦Vµo®g¤l¼u
+	//µo®g¤è¦V»Prad¤Ï¤è¦V¡]¿ù¶}180¢X=£k radian¡^¡C
+	//µo®gªº¨ãÅé³B²z¥HDirectedShot¨ç¼Æ¨Ó°õ¦æ¡C
+	if (shot_button) DirectedShot(x, y, rad+M_PI);
+}

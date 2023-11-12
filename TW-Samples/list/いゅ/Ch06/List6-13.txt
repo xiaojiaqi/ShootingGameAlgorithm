@@ -1,0 +1,34 @@
+List6-13 魔王機的分離與合體
+// 表示魔王機的結構體
+#define MAX_PART 32
+typedef struct BOSS_STRUCT {
+	float X, Y;          // 魔王機的座標
+	struct BOSS_STRUCT* 
+		Part[MAX_PART];  // 組成魔王機的零件（小魔王機）
+	int NumPart;         // 零件的數量
+	float PX[MAX_PART], 
+		PY[MAX_PART];    // 零件的相對座標
+} BOSS;
+
+void MoveBoss(BOSS* boss);
+
+// 分離中的動作：
+// 讓各零件獨立移動，
+// 關於移動的具體處理移至MoveBoss函數來處理。
+void MoveSeparatedBoss(BOSS* boss) {
+	for (int i=0; i<boss->NumPart; i++) {
+		MoveBoss(boss->Part[i]);
+	}
+}
+
+// 合體中的動作：
+// 為了讓所有零件能夠一體化地移動，
+// 將所有零件配置在相對於中心座標的固定位置。
+// 關於移動的具體處理移至MoveBoss函數處理。
+void MoveUnitedBoss(BOSS* boss) {
+	MoveBoss(boss);
+	for (int i=0; i<boss->NumPart; i++) {
+		boss->Part[i]->X=boss->X+boss->PX[i];
+		boss->Part[i]->Y=boss->Y+boss->PY[i];
+	}
+}

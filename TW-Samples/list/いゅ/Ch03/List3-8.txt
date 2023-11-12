@@ -1,0 +1,21 @@
+List3-8 用按鈕來調節速度
+void SpeedControlByButton(
+	float& speed,     //速度
+	float accel,      //加速的比例
+	float max_speed,  //最高速度
+	float min_speed,  //最低速度
+	bool button       //速度調節按鈕的輸入
+) {
+	//前次按鈕的狀態
+	static bool prev_button=false;
+	
+	//放開按鈕後右再按押時：
+	//執行速度調節。
+	if (!prev_button && button) {
+		if (speed>=max_speed) speed=min_speed;
+		else speed+=accel;
+	}
+	
+	//記錄按鈕的狀態
+	prev_button=button;
+}

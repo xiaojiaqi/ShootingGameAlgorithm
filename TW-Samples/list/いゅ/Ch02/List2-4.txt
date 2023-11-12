@@ -1,0 +1,41 @@
+List2-4使用DDA時瞄準彈的移動
+
+void MoveAimingBulletDDA(
+	int& x, int& y,  //子彈座標
+	int vx, int vy,  //子彈移動方向
+	int dx, int dy,  // X方向與Y方向的差分
+	int& diff,       //誤差
+	int speed        // 子彈速度
+) {
+	//移動距離的X方向較長時的處理
+	if (dx>=dy) {
+		for (int i=0; i<speed; i++) {
+
+			//讓X方向每回移動
+			x+=vx;
+			
+			// Y方向上有誤差累積時，才移動
+			diff+=dy;
+			if (diff>=dx) {
+				diff-=dx;
+				y+=vy;
+			}
+		}
+	} 
+
+	//移動距離Y方向較長時的處理
+	else {
+		for (int i=0; i<speed; i++) {
+
+			// 讓Y方向每回移動
+			y+=vy;
+
+			// X方向只有誤差累積時才移動
+			diff+=dx;
+			if (diff>=dy) {
+				diff-=dy;
+				x+=vx;
+			}
+		}
+	}
+}

@@ -1,0 +1,51 @@
+List4-16 利用地形反射的雷射
+//表示雷射各部份的結構體
+typedef struct LASER_STRUCT {
+	float X, Y;                 //左上座標
+	float W, H;                 //寬度與高度
+	float VX, VY;               //速度
+	float OldX, OldY;           //舊座標
+	struct LASER_STRUCT* Prec;  //前一個部
+	                            //（先端的部份為NULL）
+} LASER_TYPE;
+
+// 移動雷射的函數
+void MoveReflectLaser(
+	LASER_TYPE* laser,         //雷射的一個部份
+	float gx0[], float gy0[],  //地形的左上座標
+	float gx1[], float gy1[],  //地形的右下座標
+	int num_ground             //地形數量
+) {
+	//前端部份：
+	//與利用地形反射的子彈相同處理方式。
+	if (!laser->Prec) {
+
+		//與地形的命中判定處理：
+		//前端部份朝垂直方向行進的座標(X, Y+VY)，
+		//判定是否命中地形。
+		//命中地形時，將垂直方向的速度倒反過來，
+		//跳脫迴圈。
+		for (int i=0; i<num_ground; i++) {
+			if (gx0[i]<laser->X+laser->W &&
+				laser->X<gx1[i] && 
+				gy0[i]<laser->Y+laser->W+laser->VY &&
+				laser->Y+laser->VY<gy1[i]
+			) {
+				laser->VX=-laser->VX;
+				break;
+			}
+		}
+
+		//前端部份行進
+		laser->X+=laser->VX;
+		laser->Y+=laser->VY;
+	}
+	
+	//前端部份以外時：
+	//追著前一個部份。
+	//朝前一個部份的舊座標移動。
+	else {
+		laser->X=laser->Prec->OldX;
+		laser->Y=laser->Prec->OldY;
+	}
+}

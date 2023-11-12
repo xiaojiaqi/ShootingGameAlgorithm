@@ -1,0 +1,35 @@
+List6-14  魔王機的變形
+// 表示魔王機的結構體
+#define MAX_PART 32
+#define MAX_FORM 8
+typedef struct BOSS_STRUCT {
+	float X, Y;                  // 魔王機的座標
+	struct BOSS_STRUCT* 
+		Part[MAX_PART];          // 構成魔王機的零件(小魔王機)
+	int NumPart;                 // 零件的數量
+	float 
+		PX[MAX_PART][MAX_FORM],  // 零件的相對座標
+		PY[MAX_PART][MAX_FORM];  // [零件編號][形態編號]
+} BOSS;
+
+// 變形：
+// 把各零件從變形前位置移動到變形後位置。
+// 從變形所需時間和計時器的比率，
+// 算出移動中的位置。
+#define TRANSFORM_TIME 180
+void TransformBoss(
+	BOSS* boss,  // 指向魔王機結構體的指標
+	int from,    // 變形前的形態編號
+	int to,      // 變形後的形態編號
+	int& timer   // 計時器
+) {
+	float ratio=(float)timer/TRANSFORM_TIME;
+	for (int i=0; i<boss->NumPart; i++) {
+		boss->Part[i]->X=
+			boss->PX[i][from]*(1-ratio)+
+			boss->PX[i][to]*ratio;
+		boss->Part[i]->Y=
+			boss->PY[i][from]*(1-ratio)+
+			boss->PY[i][to]*ratio;
+	}
+}

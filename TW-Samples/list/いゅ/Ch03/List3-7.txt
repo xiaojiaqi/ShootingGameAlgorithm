@@ -1,0 +1,55 @@
+List3-7  傳送移動
+void Warp(
+	float& x, float& y,    //自機座標
+	float speed,           //自機的移動速度
+	float warp_dist,       //傳送的移動距離
+	bool up, bool down,    //搖桿輸入（上下）
+	bool left, bool right  //搖桿輸入（左右）
+) {
+	static bool 
+		up0=false, down0=false,     //上一次的搖桿輸入
+		left0=false, right0=false,  //（上下、左右）
+		released=true;              //是否使其呈無輸入狀態
+	static int time=0;              //輸入時間限制
+p.87
+	//搖桿輸入時
+	if (up || down || left || right) {
+		
+		//要傳送時：
+		//間隔著一次無輸入，而且在時間限制內，
+		//輸入與前回同樣的方向時。
+		if (released && time>0 &&
+			up==up0 && down==down0 &&
+			left==left0 && right==right0
+		) {
+			if (up   ) y-=warp_dist;
+			if (down ) y+=warp_dist;
+			if (left ) x-=warp_dist;
+			if (right) x+=warp_dist;
+		}
+		
+		//不傳送時：
+		//是否間隔無輸入狀態、是否超過時間限制，
+		//輸入與前回方向不同時。
+		//記錄方向，設定時間限制。
+		else {
+			up0=up; down0=down;
+			left0=left; right0=right;
+			time=10;
+			
+			//一般移動
+			if (up   ) y-=speed;
+			if (down ) y+=speed;
+			if (left ) x-=speed;
+			if (right) x+=speed;
+		}
+
+		released=false;
+	}
+	
+	//搖桿為無輸入狀態時
+	else released=true;
+	
+	//縮減時間
+	if (time>0) time--;
+}

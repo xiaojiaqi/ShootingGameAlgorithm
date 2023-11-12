@@ -1,0 +1,25 @@
+List6-17 反擊彈
+#include <stdlib.h>
+
+void Revenge(
+	float rate,          // 反擊彈發射的機率
+	float ex, float ey,  // 敵機的座標
+	float tx, float ty   // 目標(自機)的座標
+) {
+	// 判定敵機是否被破壞了：
+	// 具體的處理移至Detroyed函數處理。
+	if (Destroyed()) {
+	
+		// 反擊彈：
+		// 使用亂數，以一定的比率射出反擊彈。
+		// 反擊彈的原理和「瞄準彈」相同。
+		// 發射的具體處理移至AimingBullet函數處理。
+		if (rand()<=rate*RAND_MAX) {
+			AimingBullet(ex, ey, tx, ty);
+		}
+		
+		// 刪除敵機:
+		// 具體的處理移至Delete函數進行。
+		Delete();
+	}
+}

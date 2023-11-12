@@ -1,0 +1,25 @@
+List2-14  n-Way的初始化
+#include <math.h>
+
+void InitNWayBullets(
+	float vx0, float vy0,    //中心子彈的速度
+	float theta,             //子彈與子彈間的角度
+	int n,                   //子彈數
+	float vx[], float vy[]   // n-Way彈的速度
+) {
+	//將子彈與子彈之間的角度轉成弳度（radian）
+	float rad_step=M_PI/180*theta;
+	
+	//計算側邊子彈與中心子彈之間的角度
+float rad=n%2 ? -n/2*rad_step : (-n/2+0.5)*rad_step;
+
+	// 計算n發子彈的速度
+	for (int i=0; i<n; i++, rad+=rad_step) {
+		
+		// 求取(vx[i],vy[i])
+		//只旋轉rad的速度向量(vx0,vy0) 
+		float c=cos(rad), s=sin(rad);
+		vx[i]=vx0*c-vy0*s;
+		vy[i]=vx0*s+vy0*c;
+	}
+}

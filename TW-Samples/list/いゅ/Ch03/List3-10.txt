@@ -1,0 +1,42 @@
+List3-10 會合體友機的動作
+//友機的狀態（捕捉、漂流、合體）
+typedef enum {
+	CAPTURED, FLOATING, DOCKED
+} DOCKING_STATE;
+
+//合體相關的處理
+void Docking(
+	float& cx, float& cy,  //友機的座標
+	float ex, float ey,    //敵機的座標
+	float mx, float my,    //自機的座標
+	DOCKING_STATE& state   //友機的狀態
+) {
+	//依友機狀態的而有不同選擇
+	switch (state) {
+		
+		//捕捉：
+		//與敵人一起移動。
+		//敵人被破壞，則變成漂流狀態。
+		//敵人的破壞判定處理是以EnemyDestroyed函數來執行。
+		case CAPTURED:
+			cx=ex; cy=ey;
+			if (EnemyDestroyed()) state=FLOATING;
+			break;
+		
+		//漂流：
+		//自由移動。
+		//在這裡是設定朝畫面下方筆直前進。
+		//一旦與自機接觸則成為合體狀態。
+		//接觸判定處理是由Catched函數來執行。
+		case FLOATING:
+			cy++;
+			if (Catched()) state=DOCKED;
+			break;
+		
+		//合體：
+		//與自機一起移動。
+		case DOCKED:
+			cx=mx; cy=my;
+			break;
+	}
+}

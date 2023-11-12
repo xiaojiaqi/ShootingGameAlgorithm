@@ -1,0 +1,38 @@
+List5-18 讓自機去「削」敵彈來增加等級
+void GrazeBullet(
+	float gx0, float gy0,    // 削過判定範圍的左上座標
+	float gx1, float gy1,    // 削過判定範圍的右下座標
+	int num_bullet,          // 敵彈數
+	float x0[], float y0[],  // 敵彈命中判定範圍的左上座標
+	float x1[], float y1[],  // 敵彈命中判定範圍的右下座標
+	bool grazing[],          // 子彈是否有削到
+	int time[],              // 已削狀態的剩餘時間
+	int& power               // 自機的能量
+	                         // (或是經驗值，得分倍率等)
+) {
+	// 對於每一顆敵彈都進行相同處理
+	for (int i=0; i<num_bullet; i++) {
+
+		// 正常狀態：
+		// 進行命中判定處理，若敵彈削到自機，
+		// 則設定為已削狀態。
+		// 設定已削狀態的剩餘時間，並增加能量值。
+		if (!grazing[i]) {
+			if (gx0<x1[i] && x0[i]<gx1 && 
+				gy0<y1[i] && y0[i]<gy1) {
+				grazing[i]=true;
+				time[i]=20;
+				power++;
+			}
+		}
+		
+		// 已削狀態：
+		// 漸漸減少已削狀態的剩餘時間。
+		// 若時間變成0，就恢復正常狀態。
+		// 若刪除這部分的處理，就變成每顆子彈只能削一次。
+		else {
+			if (time[i]==0) grazing[i]=false; else time[i]--;
+		}
+	}
+	
+}

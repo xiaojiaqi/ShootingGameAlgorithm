@@ -1,0 +1,25 @@
+List7-5 上下左右連在一起的背景的顯示
+// 碎片數目(X方向、Y方向)
+#define XMAX 1000
+#define YMAX 50
+
+// 上下左右相連的背景的顯示
+void DrawCirculatedBG(
+	int sx, int sy,      // 背景上的畫面左上角所對應的位置
+	int sw, int sh,      // 畫面大小
+	int cw, int ch,      // 碎片大小
+	int map[XMAX][YMAX]  // 背景資料(碎片編號的陣列)
+) {
+	// 所要描繪的碎片的範圍
+	int x0=sx/cw, y0=sy/ch;    // 左上端的碎片
+	int x1=(sx+sw-1)/cw%XMAX, 
+		y1=(sy+sh-1)/ch%YMAX;  // 右下端的碎片
+
+	// 描繪碎片：
+	// 各碎片的描繪處理移至DrawChip函數進行。
+	for (int i=x0; i!=x1+1; i=(i+1)%XMAX) {
+		for (int j=y0; j!=y1+1; j=(j+1)%YMAX) {
+			DrawChip(map[i][j], j*cw-sx, i*ch-sy);
+		}
+	}
+}

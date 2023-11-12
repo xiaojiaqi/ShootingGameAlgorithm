@@ -1,0 +1,27 @@
+List4-17 武器的切換
+//武器的數量
+#define Max_WEAPONS 5
+//切換武器的處理
+void SelectWeapon(
+	bool button  //按鈕的狀態（按押時為true）
+) {
+	static int weapon_id=0;         //現在選擇中的武器號碼
+	static bool prev_button=false;  //上一次的按鈕狀態
+	
+	//切換武器：
+	//上一次未按下按鈕，此次按押時，
+	//則執行武器切換。
+	if (!prev_button && button) {
+		weapon_id=(weapon_id+1)%MAX_WEAPONS;
+	}
+	
+	//顯示武器的小圖示
+	//顯示全部的小圖示，讓選擇中的小圖示看起來比較醒目。
+	//顯示具體處理是以DrawIcon函數與FocusIcon函數
+	//來執行。
+	for (int i=0; i<MAX_WEAPONS; i++) DrawIcon(i);
+	FocusIcon(weapon_id);
+
+	//儲存這一次按鈕的狀態
+	prev_button=button;
+}

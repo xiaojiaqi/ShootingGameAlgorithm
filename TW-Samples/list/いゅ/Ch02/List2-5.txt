@@ -1,0 +1,23 @@
+List2-5使用固定小數點數的瞄準彈初始化
+void Draw(int x, int y);
+void InitAimingBulletFP(
+	int mx, int my,    //自機座標
+	int ex, int ey,    //敵機座標
+	int& x, int& y,    //子彈座標
+	int& vx, int& vy,  //子彈速度
+	int speed          //彈速
+) {
+	//設定子彈座標
+	x=ex; y=ey;
+
+	//求取對於目標的X方向或Y方向差分之絕對值(dx,dy)
+	int dx=mx>=ex?mx-ex:ex-mx;
+	int dy=my>=ey?my-ey:ey-my;
+
+	//以X方向與Y方向差分中較長者作為距離d
+	int d=dx>=dy?dx:dy;
+
+	// 求速度(vx,vy)
+	vx=(mx-ex)*speed/d;
+	vy=(my-ey)*speed/d;
+}

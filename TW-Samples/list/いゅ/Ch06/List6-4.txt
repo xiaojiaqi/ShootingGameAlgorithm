@@ -1,0 +1,79 @@
+List6-4 出現在空中的敵機
+// 表示敵機狀態的常數：
+// 準備(出現前)，出現、活動、消失
+typedef enum {
+	READY, APPEAR, ACT, DISAPPEAR
+} STATE_TYPE;
+
+// 出現和消失所需的時間、活動時間
+#define TIME 30
+#define ACT_TIME 180
+
+// 出現在空中的敵機處理
+void EmergingEnemy(
+	int num_enemy,           // 敵機數量
+	STATE_TYPE state[],      // 敵機的狀態
+	float ex[], float ey[],  // 敵機的座標
+	float alpha[],           // alpha值
+	int timer[]              // 計時器
+) {
+	// 所有敵機相關的迴圈處理
+	for (int i=0; i<num_enemy; i++) {
+		
+		// 根據不同狀況進行不同的處理
+		switch (state[i]) {
+			
+			// 準備(出現前)：
+			// 將alpha值和計時器初始化，
+			// 並移動到出現狀態。
+			case READY:
+				state[i]=APPEAR;
+				alpha[i]=0;
+				timer[i]=TIME;
+				break;
+			
+			// 出現：
+			// 漸漸增加alpha值。
+			// 若計時器變成了0則移動到活動狀態。
+			case APPEAR:
+				alpha[i]=(float)(TIME-timer[i])/TIME;
+				timer[i]--;
+				if (timer[i]==0) {
+					state[i]=ACT;
+					timer[i]=ACT_TIME;
+				}
+				break;
+			
+			// 活動：
+			// 進行移動和攻擊。
+			// 若計時器變成0則移到消失狀態。
+			// 關於移動和攻擊的具體處理移至
+			// MoveEnemy函數進行。
+			case ACT:
+				MoveEnemy(i);
+				timer[i]--;
+				if (timer[i]==0) {
+					state[i]=DISAPPEAR;
+					timer[i]=TIME;
+				}
+				break;
+			
+			// 消失：
+			// 漸漸減少alpha值。
+			// 若計時器變成0則消滅敵機。
+			// 消滅敵機的具體處理移至
+			// DeleteEnemy函數進行。
+			case DISAPPEAR:
+				alpha[i]=(float)timer[i]/TIME;
+				timer[i]--;
+				if (timer[i]==0) {
+					DeleteEnemy(i);
+				}
+				break;
+		}
+		
+		// 敵機的顯示
+		// 根據alpha值來進行alpha合成顯示。
+		DrawEnemy(ex[i], ey[i], alpha[i]);
+	}
+}

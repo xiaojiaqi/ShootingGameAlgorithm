@@ -1,0 +1,46 @@
+List3-18以按鈕來開啟防護罩
+void Barrier2(
+	float x0, float y0,        //防護罩的命中判定
+	float x1, float y1,        //（左上座標、右下座標）
+	float bx0[], float by0[],  //子彈的命中判定
+	float bx1[], float by1[],  //（左上座標、右下座標）
+	int num_bullet,            //彈數
+	float ex0[], float ey0[],  //敵機的命中判定
+	float ex1[], float ey1[],  //（左上座標、右下座標）
+	int num_enemy,             //敵機數
+	int& energy,               //防護罩的能量
+	bool barrier_button        //防護罩按鈕狀態
+) {
+	//開啟防護罩：
+	//當按下防護罩按鈕，
+	//且有能量時，則開啟防護罩。
+	if (barrier_button && energy>0) {
+	
+		//防護罩與子彈的命中判定處理：
+		//子彈擊中防護罩，子彈就會消失並減少防護罩的能量，
+		//消去子彈的具體處理是以函數DeleteBullet來執行。
+		for (int i=0; i<num_bullet && energy>0; i++) {
+			if (bx0[i]<x1 && x0<bx1[i] && 
+				by0[i]<y1 && y0<by1[i]) {
+				DeleteBullet(i);
+				energy--;
+			}
+		}
+
+		//防護罩與敵機的命中判定處理：
+		//敵機衝撞防護罩，則敵機損傷，
+		//防護罩的能量減低。
+		//給予敵機損傷的具體處理
+		//以函數DamageEnemy來執行。
+		for (int i=0; i<num_enemy && energy>0; i++) {
+			if (ex0[i]<x1 && x0<ex1[i] && 
+				ey0[i]<y1 && y0<ey1[i]) {
+				DamageEnemy(i);
+				energy--;
+			}
+		}
+
+		//能量的消耗
+		energy--;
+	}
+}

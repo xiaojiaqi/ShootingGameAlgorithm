@@ -1,0 +1,22 @@
+List5-12 接近友機強化射擊
+void ReinforcedShot(
+	float x0, float y0,    //自機的左上座標
+	float x1, float y1,    //自機的右下座標
+	float cx0, float cy0,  //友機的左上座標
+	float cx1, float cy1,  //友機的右下座標
+	bool button            //射擊按鈕的狀態
+) {
+	//判定是否與友機接近
+	//接近時則強化射擊
+	//未處於接近時則為一般射擊
+	//射擊的具體處理
+	//是以SpecialShot、NormalShot的各函數來執行。
+	if (button) {
+		if (cx0<x1 && x0<cx1 && cy0<y1 && y0<cy1) {
+			SpecialShot();
+		} else {
+			NormalShot();
+		}
+	}
+}
+

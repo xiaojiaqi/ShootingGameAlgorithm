@@ -1,0 +1,23 @@
+List2-3使用DDA的瞄準彈初始化
+void InitAimingBulletDDA(
+	int mx, int my,    //自機座標
+	int ex, int ey,    //敵機座標
+	int& x, int& y,    //子彈座標
+	int& vx, int& vy,  //子彈移動方向
+	int& dx, int& dy,  // X方向與Y方向的差分
+	int& diff          //誤差
+) {
+	//設定子彈的座標
+	x=ex; y=ey;
+
+	//求出子彈移動方向(vx,vy)：值為1或 -1
+	vx=mx>ex?1:-1;
+	vy=my>ey?1:-1;
+
+	//求出相對目標的X方向與Y方向差分的絕對值(dx,dy) 
+	dx=mx>=ex?mx-ex:ex-mx;
+	dy=my>=ey?my-ey:ey-my;
+
+	//誤差diff：dx>=dy時dx/2，dx<dy時則dy/2
+	diff=dx>=dy?dx/2:dy/2;
+}

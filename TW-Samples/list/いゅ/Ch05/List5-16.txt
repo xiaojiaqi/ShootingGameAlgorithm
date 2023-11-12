@@ -1,0 +1,43 @@
+List5-16 將敵彈反射回去
+#include <math.h>
+
+void DeleteBullet(int id);
+void Shot(float x, float y, float vx, float vy);
+
+void ReflectBullet(
+	float fx0, float fy0,    // 反射領域的左上座標
+	float fx1, float fy1,    // 反射領域的右下座標
+	int num_bullet,          // 敵彈數量
+	float x0[], float y0[],  // 敵彈的左上座標
+	float x1[], float y1[],  // 敵彈的右下座標
+	float x[], float y[],    // 敵彈的中心座標
+	float ex[], float ey[],  // 射出敵彈的敵機中心座標
+	float speed              // 反射彈的速度
+) {
+	// 對於所有敵彈都進行相同的處理
+	for (int i=0; i<num_bullet; i++) {
+	
+		// 敵彈與反射領域的命中判定處理：
+		// 若敵彈接觸到反射領域，
+		// 則消除子彈，並從同一位置往敵機發射子彈。
+		if (fx0<x1[i] && x0[i]<fx1 && 
+			fy0<y1[i] && y0[i]<fy1) {
+
+			// 消除子彈：
+			// 具體處理移至DeleteBullet函數進行處理。
+			DeleteBullet(i);
+			
+			// 反射彈的發射：
+			// 往敵機方向發射反射彈，
+			// 發射的具體處理移至Shot函數處理。
+			// 另外，嚴格來說必須要有d=0時的處理。
+			float vx=ex[i]-x[i], vy=ey[i]-y[i];
+			if (vx!=0 || vy!=0) {
+				float d=sqrt(vx*vx+vy*vy);
+				vx*=speed/d;
+				vy*=speed/d;
+				Shot(x[i], y[i], vx, vy);
+			}
+		}
+	}
+}

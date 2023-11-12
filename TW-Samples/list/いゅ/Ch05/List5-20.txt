@@ -1,0 +1,62 @@
+List5-20 可自由移動的瞄準器
+// 狀態(正常、瞄準、攻擊) 
+typedef enum {
+	NORMAL, SIGHT, ATTACK
+} STATE_TYPE;
+
+// 移動自機和瞄準器
+void MoveSight1(
+	float& x, float& y,     // 自機的座標
+	float& sx, float& sy,   // 瞄準器的座標
+	float speed,            // 自機移動的速度
+	float sight_speed,      // 瞄準器移動的速度
+	bool up, bool down,     // 搖捍輸入(上下)
+	bool left, bool right,  // 搖捍輸入(左右)
+	bool button             // 瞄準鈕輸入
+) {
+	static int state=NORMAL;  // 狀態(預設值為正常)
+	static int time;          // 攻擊時間
+	
+	// 根據狀況來做不同的處理
+	switch (state) {
+	
+		// 正常狀態：
+		// 移動自機，
+		// 若有按下瞄準鈕，則放出瞄準器，並進入瞄準狀態。
+		case NORMAL:
+			if (up   ) y-=speed;
+			if (down ) y+=speed;
+			if (left ) x-=speed;
+			if (right) x+=speed;
+			if (button) {
+				state=SIGHT;
+				sx=x; sy=y;
+			}
+			break;
+		
+		// 瞄準狀態：
+		// 移動瞄準點，若按鈕被放開則進入攻擊狀態。
+		case SIGHT:
+			if (up   ) sy-=sight_speed;
+			if (down ) sy+=sight_speed;
+			if (left ) sx-=sight_speed;
+			if (right) sx+=sight_speed;
+			if (!button) {
+				state=ATTACK;
+				time=100;
+			}
+			break;
+		
+		// 攻擊狀態：
+		// 移動自機，過了一段時間後則回到正常狀態。
+		// 關於攻擊的具體處理移至Attack函數處理。
+		case ATTACK:
+			if (up   ) y-=speed;
+			if (down ) y+=speed;
+			if (left ) x-=speed;
+			if (right) x+=speed;
+			if (time==0) state=NORMAL;
+			time--;
+			break;
+	}
+}

@@ -1,0 +1,17 @@
+List 2-13旋轉速度向量
+#include <math.h>
+
+void RotateVelocity(
+	float theta,           //旋轉角度
+	float vx0, float vy0,  //原來的速度
+	float& vx, float& vy   //旋轉後的速度
+) {
+	//將theta轉成radian，求取cos與sin
+	// M_PI為圓周率
+	float rad=M_PI/180*theta;
+	float c=cos(rad), s=sin(rad);
+
+	//將速度vector(vx0,vy0)旋轉，求取(vx,vy)
+	vx=vx0*c-vy0*s;
+	vy=vx0*s+vy0*c;
+}

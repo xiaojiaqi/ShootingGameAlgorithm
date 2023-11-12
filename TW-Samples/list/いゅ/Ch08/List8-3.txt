@@ -1,0 +1,15 @@
+List8-3 亂數的產生
+// 亂數的種子
+typedef unsigned int ulong;
+static ulong seed=1;
+
+// 種子的初始化
+void srand(ulong s) {
+	seed=s;
+}
+
+// 亂數的產生
+ulong rand() {
+	seed=seed*48828125UL+1;
+	return seed;
+}

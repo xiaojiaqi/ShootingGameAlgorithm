@@ -1,0 +1,19 @@
+List5-14 強化射擊到友機的子彈
+void ReinforcedShot3(
+	float sx0, float sy0,  //射出子彈的左上座標
+	float sx1, float sy1,  //射出子彈的右下座標
+	float cx0, float cy0,  //友機的左上座標
+	float cx1, float cy1   //友機的右下座標
+) {
+	//射出子彈與友機的命中判定處理：
+	//如果射中時則將消除該子彈，
+	//射出更強的子彈來取代。
+	//具體的處理，
+	//是以DeleteShot、SpecialShot的各函數來執行。
+	//也有不將消除該子彈，
+	//而使用改變子彈強度的方法
+	if (cx0<sx1 && sx0<cx1 && cy0<sy1 && sy0<cy1) {
+		DeleteShot();
+		SpecialShot();
+	}
+}

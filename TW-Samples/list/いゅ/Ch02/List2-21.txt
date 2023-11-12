@@ -1,0 +1,18 @@
+List2-21彈速與速度的更新
+void MoveAcceleratedBullet(
+	float speed,          //彈速
+	float accel,          //加速度
+	float& vx, float& vy  //速度的X成份與Y成份
+) {
+	//速度以舊的彈速來除
+	if (speed!=0) {
+		vx/=speed; vy/=speed;
+	}
+
+	//更新彈速
+	speed+=accel;
+
+	//速度乘以新的彈速
+	vx*=speed; vy*=speed;
+}
+

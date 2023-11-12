@@ -1,0 +1,34 @@
+List3-16  子機的初始化與移動
+//子機的初始化
+void InitOption(
+	float x, float y,        //自機的座標（X方向、Y方向）
+	float ox[], float oy[],  //自機的舊座標（陣列）
+	int length               //舊座標的個數（陣列的長度）
+) {
+	//以自機座標來初始化陣列中全部的元素
+	for (int i=0; i<length; i++) {
+		ox[i]=x; oy[i]=y;
+	}
+}
+
+//子機的移動
+void MoveOption(
+	float x, float y,        //自機座標（X方向、Y方向）
+	float ox[], float oy[],  //自機的舊座標（陣列）
+	int length,              //舊座標數（陣列長度）
+	int& index,              //座標的保存位置（陣列的位置）
+	int opt_count,           //子機的個數
+	int opt_interval         //子機的間隔（陣列上的間隔）
+) {
+	//繪出子機：
+	// DrawOption為描繪子機的函數。
+	for (int c=0, i=index; c<opt_count; c++) {
+		i=(i-opt_interval+length)%length;
+		DrawOption(ox[i], oy[i]);
+	}
+	
+	//儲存自機的座標、更新座標的保存位置
+	ox[index]=x;
+	oy[index]=y;
+	index=(index+1)%length;
+}

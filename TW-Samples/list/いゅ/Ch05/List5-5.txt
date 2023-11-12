@@ -1,0 +1,36 @@
+List5-5 µL¼Äª¬ºA
+void Invincible(
+	bool invincible,           //µL¼Äª¬ºA®É¬°true
+	float x0, float y0,        //¦Û¾÷ªº¥ª¤W®y¼Ð
+	float x1, float y1,        //¦Û¾÷ªº¥k¤U®y¼Ð
+	float ex0[], float ey0[],  //¼Ä¾÷ªº¥ª¤W®y¼Ð
+	float ex1[], float ey1[],  //¼Ä¾÷ªº¥k¤U®y¼Ð
+	int num_enemy,             //¼Ä¾÷ªº¼Æ¶q
+	float bx0[], float by0[],  //¼Ä¼uªº¥ª¤W®y¼Ð ’e
+	float bx1[], float by1[],  //¼Ä¼uªº¥k¤U®y¼Ð
+	int num_bullet             //¤l¼uªº¼Æ¶q
+) {
+	//»P¼Ä¾÷©R¤¤§P©w³B²z¡G
+	//»P¼Ä¾÷¼²À»®É¡A­Y¬°µL¼Äª¬ºA«hµ¹¤©¼Ä¾÷·l¶Ë¡A
+	//­Y¬°¤@¯ëª¬ºA«h¬°¥¢»~¡C
+	//µ¹¤©¼Ä¾÷·l¶Ë©Î¥¢»~ªº¨ãÅé³B²z¡A
+	//¬O¥ÎDamageEnemy¡BMissªº¦U¨ç¼Æ¨Ó°õ¦æ¡C
+	for (int i=0; i<num_enemy; i++) {
+		if (ex0[i]<x1 && x0<ex1[i] && 
+			ey0[i]<y1 && y0<ey1[i]) {
+			if (invincible) DamageEnemy(i); else Miss();
+		}
+	}
+	
+	//»P¼Ä¼uªº©R¤¤§P©w³B²z¡G
+	//»P¼Ä¼u¼²À»®É¡A­Y¬°µL¼Äª¬ºA«h®ø°£¼Ä¼u¡A
+	//­Y¬°¤@¯ëª¬ºA«h¬°¥¢»~¡C
+	//®ø¥h»P¥¢»~ªº¨ãÅé³B²z¡A
+	//¬O¥HDeleteBullet¡BMissªº¦U¨ç¼Æ¨Ó°õ¦æ¡C
+	for (int i=0; i<num_bullet; i++) {
+		if (bx0[i]<x1 && x0<bx1[i] && 
+			by0[i]<y1 && y0<by1[i]) {
+			if (invincible) DeleteBullet(i); else Miss();
+		}
+	}
+}

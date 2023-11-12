@@ -1,0 +1,9 @@
+List2-8 方向彈的移動
+void MoveDirectedBullet(
+	float& x, float& y,  //子彈座標
+	float vx, float vy   //子彈速度
+) {
+	//在子彈座標(x,y)加上速度(vx,vy)
+	x+=vx;
+	y+=vy;
+}

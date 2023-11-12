@@ -1,0 +1,41 @@
+List4-14 ªuµÛ¦a§Î­¸¦æªº­¸¼u
+void MoveGroundMissile(
+	float& x0, float& y0,      //­¸¼uªº¥ª¤W®y¼Ğ
+	float& x1, float& y1,      //­¸¼uªº¥k¤U®y¼Ğ
+	float vx, float vy,        //­¸¼uªº³t«×¡]¤ô¥­¡B««ª½¡^
+	float gx0[], float gy0[],  //¦a§Îªº¥ª¤W®y¼Ğ ’nŒ`‚Ì¶ãÀ•W
+	float gx1[], float gy1[],  //¦a§Îªº¥k¤U®y¼Ğ
+	int num_ground,            //¦a§Îªº¼Æ¶q
+	float ex0[], float ey0[],  //¼Ä¤Hªº¥ª¤W®y¼Ğ
+	float ex1[], float ey1[],  //¼Ä¤Hªº¥k¤U®y¼Ğ
+	int num_enemy              //¼Ä¤Hªº¼Æ¶q
+) {
+	//»P¦a§Îªº©R¤¤§P©w³B²z¡G
+	//Ãö©ó´Â««ª½¤è¦V¦æ¶iªº®y¼Ğ¡A
+	//§P©w¬O§_»PÀ»¤¤¦a§Î¡C
+	//À»¤¤¦a§Î®É¡A­n¨Ï««ª½¤è¦Vªº³t«×¬°0¡A
+	//¸õ²æ°j°é¡C
+	for (int i=0; i<num_ground; i++) {
+		if (gx0[i]<x1 && x0<gx1[i] && 
+			gy0[i]<y1+vy && y0+vy<gy1[i]) {
+			vy=0;
+			break;
+		}
+	}
+	
+	//­¸¼u¦æ¶i
+	x0+=vx; y0+=vy;
+	x1+=vx; y1+=vy;
+
+	//»P¼Ä¤Hªº©R¤¤§P©w³B²z¡G
+	//©R¤¤¼Ä¤H®É¡Aµ¹¤©¼Ä¤H·l¶Ë¡A
+	//¸õ²æ°j°é¡C
+	//·l¶Ë¨ãÅé³B²z¬O¥HDamageEnemy¨ç¼Æ¨Ó°õ¦æ¡C
+	for (int i=0; i<num_enemy; i++) {
+		if (ex0[i]<x1 && x0<ex1[i] && 
+			ey0[i]<y1 && y0<ey1[i]) {
+			DamageEnemy(i);
+			break;
+		}
+	}
+}

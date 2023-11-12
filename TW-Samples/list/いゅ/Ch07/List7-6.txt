@@ -1,0 +1,30 @@
+List7-6 旋轉
+#include <math.h>
+
+void DrawChip(int id, int x, int y);
+
+// 碎片數目(X方向、Y方向)
+#define XMAX 20
+#define YMAX 400
+
+// 背景的顯示
+void DrawBG(
+	int sx, int sy,      // 畫面中心的座標
+	int sw, int sh,      // 畫面的大小
+	int cw, int ch,      // 碎片的大小
+	int map[YMAX][XMAX]  // 背景資料(碎片編號的陣列)
+) {
+	// 求出在旋轉時會用到的背景的最大範圍
+	int w2=sw/2, h2=sh/2;            // 畫面的寬和高的1/2
+	int r=(int)sqrt(w2*w2+h2*h2);    // 圓的半徑
+	int x0=(sx-r)/cw, y0=(sy-r)/ch;  // 左上端的碎片
+	int x1=(sx+r)/cw, y1=(sy+r)/ch;  // 右下端的碎片
+
+	// 描繪碎片:
+	// 關於各碎片的描繪移至DrawChip函數處理
+	for (int i=y0; i<=y1; i++) {
+		for (int j=x0; j<=x1; j++) {
+			DrawChip(map[i][j], j*cw-sx+sw/2, i*ch-sy+sh/2);
+		}
+	}
+}

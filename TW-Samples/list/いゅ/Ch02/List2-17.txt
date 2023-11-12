@@ -1,0 +1,68 @@
+List2-17有轉彎角度限制的誘導彈移動
+#include <math.h>
+
+void MoveHomingBullet(
+	float& x, float& y,    //子彈座標
+	float& vx, float& vy,  //子彈速度
+	float mx, float my,    //自機的座標
+	float speed,           //彈速
+	float theta            //轉彎角度上限
+) {
+	//子彈原來的速度
+	float vx0=vx, vy0=vy;
+
+	//求取自機方向的速度向量(vx1,vy1)
+	float vx1, vy1;
+	float d=sqrt((mx-x)*(mx-x)+(my-y)*(my-y));
+	if (d) {
+		vx1=(mx-x)/d*speed;
+		vy1=(my-y)/d*speed;
+	} else {
+		vx1=0;
+		vy1=speed;
+	}
+
+	//求取向右彎曲之轉彎角度上限的速度vector(vx2,vy2)
+	// M_PI為圓周率
+	float rad=M_PI/180*theta;
+	float vx2=cos(rad)*vx0-sin(rad)*vy0;
+	float vy2=sin(rad)*vx0+cos(rad)*vy0;
+
+	//決定要向自機方向或是要向轉彎角度上限彎曲
+	if (vx0*vx1+vy0*vy1>=vx0*vx2+vy0*vy2) {
+		
+		//自機方向在可轉彎的範圍內時
+		//向自機方向彎曲
+		vx=vx1;
+		vy=vy1;
+
+	} else {
+
+		//自機方向為可轉彎的範圍外時：
+		//求取左曲轉彎角度上限的速度向量(vx3,vy3)
+		float vx3= cos(rad)*vx0+sin(rad)*vy0;
+		float vy3=-sin(rad)*vx0+cos(rad)*vy0;
+		
+		//求取子彈對自機的相對位置向量(px,py)
+		float px=mx-x, py=my-y;
+		
+		//決定右曲或左曲
+		if (px*vx2+py*vy2>=px*vx3+py*vy3) {
+
+			//右曲時
+			vx=vx2;
+			vy=vy2;
+
+		} else {
+
+			//左曲時
+			vx=vx3;
+			vy=vy3;
+
+		}
+	}
+
+	//更新子彈座標(x,y)後，移動子彈
+	x+=vx;
+	y+=vy;
+}

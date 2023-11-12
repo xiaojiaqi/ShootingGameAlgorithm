@@ -1,0 +1,13 @@
+List2-22墜落彈的移動
+void MoveDroppingBullet(
+	float& x, float& y,   //子彈的座標
+	float accel,          //加速度
+	float& vx, float& vy  //速度的X成份與Y成份
+) {
+	//更新速度：
+	// X成份不變化，僅變化Y成份
+	vy+=accel;
+
+	//更新座標
+	x+=vx; y+=vy;
+}

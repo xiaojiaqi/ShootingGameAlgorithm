@@ -1,0 +1,25 @@
+List3-5 設定上下左右與斜向移動的速度相同
+#include <math.h>
+
+void MoveAtConstantSpeed(
+	float& x, float& y,    //自機座標（X方向,Y方向）
+	float speed,           //自機的速度
+	bool up, bool down,    //朝向上下方向的搖桿輸入
+	bool left, bool right  //朝向左右方向的搖桿輸入
+) {
+	//斜向移動時的速度
+	//設定約為上下左右時的0.7倍
+	float s=speed/sqrt(2);
+
+	//斜向移動
+	if (up   && left ) x-=s, y-=s; else
+	if (up   && right) x+=s, y-=s; else
+	if (down && left ) x-=s, y+=s; else
+	if (down && right) x+=s, y+=s; else
+	
+	//上下左右移動
+	if (up    && !down ) y-=speed; else
+	if (down  && !up   ) y+=speed; else
+	if (left  && !right) x-=speed; else
+	if (right && !left ) x+=speed;
+}

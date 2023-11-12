@@ -1,0 +1,27 @@
+List3-3表現滾轉的程式
+void RollMyShip(
+	int& roll,			//滾轉的角度
+boll left, bool right //搖桿往左右方向輸入
+) {
+	//用搖桿輸入左的時候
+//-20<roll時，則roll -1
+if (left && -20<roll) roll--;
+
+//搖桿輸入右時：
+//roll<20時則roll +1
+	if (right && roll<20) roll++;
+	//搖桿未輸入左、右時：
+//roll則趨近於0
+	if (!lefr && !right) {
+		if (roll<0) roll++; else
+		if(0< roll) roll--;
+	}
+	
+//依roll值的對應，表現不同的模式
+//顯示模式的具體處理是以函數Draw來執行
+if (-20<=roll && roll<-15) Draw(LEFT_BIG_ROLL); else
+if (-15<=roll && roll –5) Draw(LEFT_SMALL_ROLL); else
+if (-5<=roll && roll<= 5) Draw(CENTER);else
+if (5<=roll && roll<= 15) Draw(RIGHT_SMALL_ROLL);else
+if (15<=roll && roll<=20) Draw(RIGHT_BIG_ROLL);
+}

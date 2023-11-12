@@ -1,0 +1,18 @@
+List3-13 水中的移動（偵測自機高度時）
+void Underwater1(
+	float& x, float& y,  //自機的座標
+	float vx, float vy,  //自機的速度
+	float h              //水面高
+) {
+	//為空中時：
+	//以一般速度移動
+	if (y<h) {
+		x+=vx; y+=vy;
+	}
+
+	//在水中時：
+	//速度變慢。這時速度設為空中的一半
+	else {
+		x+=vx/2; y+=vy/2;
+	}
+}

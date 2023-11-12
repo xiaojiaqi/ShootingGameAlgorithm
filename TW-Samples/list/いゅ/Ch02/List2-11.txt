@@ -1,0 +1,14 @@
+List 2-11 製作位置的表單
+#include <math.h>
+
+// 放置自機位置的表單
+int mpos[360][2];
+
+//製作表單
+// M_PI為圓周率
+void MakeTable() {
+	for (int i=0; i<360; i++) {
+		mpos[i][0]=cos(M_PI/180*i)*1000;
+		mpos[i][1]=sin(M_PI/180*i)*1000;
+	}
+}

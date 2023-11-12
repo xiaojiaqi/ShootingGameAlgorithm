@@ -1,0 +1,23 @@
+List6-6 使用準備好的軌道資料移動敵機
+void OrbitalFlight(
+	int num_enemy,           // 敵機數量
+	float ex[], float ey[],  // 敵機的座標
+	int index[],             // 指定軌道資料的編號
+	int num_orbit,           // 軌道資料的要素數
+	float ox[], float oy[]   // 軌道資料(座標)
+) {
+	for (int i=0; i<num_enemy; i++) {
+		
+		// 敵座標的更新：
+		// 讀出軌道資料，做為敵機的新座標。
+		ex[i]=ox[index[i]];
+		ey[i]=oy[index[i]];
+		
+		// 遞增編號(資料讀取起始位置)：
+		// 若已到達軌道資料的最末端，則刪除敵機。
+		// 刪除敵機的具體處理移至DeleteEnemy函數處理。
+		// 
+		index[i]++;
+		if (index[i]==num_orbit) DeleteEnemy(i);
+	}
+}

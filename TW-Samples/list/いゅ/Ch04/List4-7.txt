@@ -1,0 +1,58 @@
+List4-7鎖定射擊
+void LockShot(
+	bool button,     //按鈕的狀態（按下時為true）
+	int min_power,   //累積能量的最小值
+	int max_gauge,   //連續射擊計量表的最大值
+	int enemy_id,    //鎖定射擊所追蹤的敵人ID
+	                 //（未鎖定時為負值）
+	float front_dir  //位於自機正面的方向
+) {
+	//累積能量、連續射擊計量表
+	static int power=0, gauge=0;
+
+	//按下按鈕時
+	if (button) {
+		
+		//累積能量不足時：
+		//增加累積能量、使連續射擊計量表為最大，
+		//發射子彈。具體處理是以Shot函數來執行。
+		if (power<min_power) {
+			power++;
+			gauge=max_gauge;
+			Shot();
+		}
+	
+		//累積能量充足時：
+		//使連續射擊計量表為0，執行鎖定射擊。
+		else {
+			gauge=0;
+			
+			//鎖定射擊：
+			//追蹤敵機時，瞄準敵人。
+			//（與「朝著自機飛來的子彈」原理相同）
+			//未追蹤敵機時，朝自機正面方向發射子彈。
+			//（與「朝自由方向發射子彈」相同）
+			//各自的具體處理是以AimingShot函數，
+			//以及DirectedShot函數來執行。
+			if (enemy_id>=0) {
+				AimingShot(enemy_id);
+			} else {
+				DirectedShot(front_dir);
+			}
+		}
+	}
+	
+	//放開按鈕時：
+	else {
+		
+		//連續射擊計量表>0時：
+		//發射一般子彈，連續射擊計量表-1。
+		if (gauge>0) {
+			Shot();
+			gauge--;
+		}
+
+		//使累積能量為0 
+		power=0;
+	}
+}

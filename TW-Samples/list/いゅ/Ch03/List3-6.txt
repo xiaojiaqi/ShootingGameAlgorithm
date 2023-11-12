@@ -1,0 +1,19 @@
+List3-6以類比式輸入移動自機的程式
+void MoveByAnalog(
+	float& x, float& y,    //自機的座標（X方向、Y方向）
+	float speed,           //自機的最高速度
+	int jx, int jy,        //搖桿的輸入值（X方向、Y方向）
+	int range, int margin  //輸入值的範圍（最大值）、邊界
+) {
+	// 與X方向有關的移動
+	if (jx<=-range+margin) x-=speed; else
+	if (+range-margin<=jx) x+=speed; else
+	if (jx<-margin) x+=speed*(jx+margin)/(range-margin*2); else
+	if (+margin<jx) x+=speed*(jx-margin)/(range-margin*2);
+	
+	//與Y方向有關的移動
+	if (jy<=-range+margin) y-=speed; else
+	if (+range-margin<=jy) y+=speed; else
+	if (jy<-margin) y+=speed*(jy+margin)/(range-margin*2); else
+	if (+margin<jy) y+=speed*(jy-margin)/(range-margin*2);
+}

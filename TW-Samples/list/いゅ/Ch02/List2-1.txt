@@ -1,0 +1,27 @@
+List2-1瞄準彈的初始化
+#include <math.h>
+
+void InitAimingBullet(
+	float mx, float my,   //自機座標
+	float ex, float ey,    // 敵機座標
+	float speed,       // 子彈速
+	float& x, float& y,   // 子彈座標
+	float& vx, float& vy  // 子彈速度
+) {
+	// 設定子彈座標
+	x=ex; y=ey;
+
+	// 求出到目標為止的距離d
+	float d=sqrt((mx-ex)*(mx-ex)+(my-ey)*(my-ey));
+
+	//讓子彈速呈固定值speed下求出速度(vx,vy)：
+	//離目標的距離d為0時，向下發射。
+	if (d) {
+		vx=(mx-ex)/d*speed;
+		vy=(my-ey)/d*speed;
+	} else {
+		vx=0;
+		vy=speed;
+	}
+}
+

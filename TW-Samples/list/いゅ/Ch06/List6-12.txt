@@ -1,0 +1,35 @@
+List6-12  魔王機的行動
+// 魔王機的狀態：
+// 攻擊0，攻擊1，攻擊2，待機
+typedef enum {
+	ATTACK0, ATTACK1, ATTACK2, WAIT
+} BOSS_STATE;
+
+
+// 各狀態的限制時間
+int Time[]={30, 40, 25, 20};
+
+// 魔王的行動
+void MoveBoss(
+	BOSS_STATE& state,  // 現在的狀態
+	int& timer           // 計時器
+) {
+	// 攻擊：
+	// 依據狀態進行不同攻擊，待機時則什麼都不做。
+	// 關於攻擊的具體處理移至
+	// Attack0，Attack1，Attack2各函數處理。
+	switch (state) {
+		case ATTACK0: Attack0(); break;
+		case ATTACK1: Attack1(); break;
+		case ATTACK2: Attack2(); break;
+	}
+	
+	// 狀態的遷移：
+	// 遞增計時器，
+	// 若超過了各狀態的限制時間則移到下一個狀態。
+	timer++;
+	if (timer>Time[state]) {
+		state=(BOSS_STATE)((state+1)%4);
+		timer=0;
+	}
+}

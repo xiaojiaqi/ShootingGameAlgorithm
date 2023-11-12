@@ -1,0 +1,33 @@
+List6-7  結合軌道資料和程式來移動敵機
+void OrbitalFlight2(
+	int num_enemy,           // 敵機的數量
+	float ex[], float ey[],  // 敵機的座標
+	int index[],             // 指定軌道資料的編號
+	int timer[],			 // 管理移動時間的計時器
+	int num_orbit,           // 軌道資料的要素數
+	float vx[], float vy[]   // 軌道資料(速度)
+	int mov_time[]			 // 軌道資料(移動時間)
+) {
+	for (int i=0; i<num_enemy; i++) {
+		
+		// 敵機座標的更新
+		// 讀出軌道資料(速度) 來移動敵機。
+		ex[i]+=vx[index[i]];
+		ey[i]+=vy[index[i]];
+		
+		// 遞增計時器：
+		// 若計時器超過軌道資料的移動時間，
+		// 則遞增計時器。
+		// 
+		index[i]++;
+		if (timer[i]==mov_time[i]) {
+			timer[i]=0;
+
+			// 遞增計時器：
+			// 若已達到軌道資料的最末端，則消除敵機。
+			// 關於刪除敵機的處理移至DeleteEnemy函數進行。
+index[i]++;
+if (index[i]==num_orbit) DeleteEnemy(i);
+	}
+}
+}

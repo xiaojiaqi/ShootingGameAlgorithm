@@ -1,0 +1,48 @@
+List6-8  編隊的移動
+// 敵機的間隔
+#define INTERVAL 6
+
+// 敵機的資訊(結構體)
+typedef struct ENEMY_STRUCT {
+	float X, Y;                 // 現在的座標
+	float OldX[INTERVAL];       // 舊的X座標
+	float OldY[INTERVAL];       // 舊的Y座標
+	int Index;                  // 指向最舊座標的index
+	struct ENEMY_STRUCT* Prec;  // 前一個敵機
+} ENEMY;
+// 編隊飛行的處理
+void Formation(
+	int num_enemy,  // 敵機數量
+	ENEMY* enemy[]  // 敵機的資訊(指向結構體的指標)
+) {
+	// 移動敵機
+	int i;
+for (i=0; i<num_enemy; i++) {
+		ENEMY* self=enemy[i];
+		ENEMY* prec=self->Prec;
+		
+		// 移動最前面以外的敵機：
+		// 從前一個敵機所儲起來的座標裡面，
+		// 找一個最舊的當成自己的座標。
+		if (prec) {
+			self->X=prec->OldX[prec->Index];
+			self->Y=prec->OldY[prec->Index];
+		}
+		
+		// 移動前頭的敵機：
+		// 關於具體處理移至MoveEnemy函數處理。
+		else {
+			MoveEnemy(i);
+		}
+	}
+
+	// 記錄舊座標：
+	// 用新座標來取代最舊的座標，
+	// 並更新index。
+	for (i=0; i<num_enemy; i++) {
+		ENEMY* self=enemy[i];
+		self->OldX[self->Index]=self->X;
+		self->OldY[self->Index]=self->Y;
+		self->Index=(self->Index+1)%INTERVAL;
+	}
+}

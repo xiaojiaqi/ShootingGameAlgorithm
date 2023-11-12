@@ -1,0 +1,41 @@
+List2-20飛彈的發射
+#include <stdio.h>
+
+//代表飛彈各部份的結構體
+typedef struct MISSILE_STRUCT {
+	float X, Y;                   //座標
+	float VX, VY;                 //速度
+	float OldX, OldY;             //舊座標
+	float Angle;                  //轉彎角度
+	float OldAngle;               //舊轉彎角度
+	struct MISSILE_STRUCT* Prec;  //指向前一部份的指標
+	                              //（如為前端部份則為NULL）
+	bool IsMissile;               //是否為飛彈
+	                              //true時為飛彈
+	                              //false時為煙
+} MISSILE_TYPE;
+
+//飛彈的發射
+void ShootMissile(
+	float x, float y,   //發射地點的座標
+	int length          //雷射的長度
+) {
+	MISSILE_TYPE* missile;    //指向飛彈構造體的指標
+	MISSILE_TYPE* prec=NULL;  //指向前一部份的指標
+	
+	//製作飛彈各部份
+	//確保飛彈結構體，初始化座標
+	//確保構造體的具體處理是以NewMissileType函數來執行
+	for (int i=0; i<length; i++, prec=missile) {
+		missile=NewMissileType();
+		missile->X=missile->OldX=x;
+		missile->Y=missile->OldY=y;
+		missile->Angle=missile->OldAngle=0;
+		//尾巴部份參照前一個部份
+		//前端部份使之參照NULL
+		missile->Prec=prec;
+
+		//前端部份為飛彈，其它部份為煙
+		missile->IsMissile=(i==0);
+	}
+}

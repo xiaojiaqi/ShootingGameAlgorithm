@@ -1,0 +1,41 @@
+List5-4 利用物品的特殊攻擊
+void ItemSpecialAttack(
+	float x0, float y0,        //自機的左上座標
+	float x1, float y1,        //自機的右下座標
+	float ix0[], float iy0[],  //物品的左上座標
+	float ix1[], float iy1[],  //物品的右下座標
+	int num_item               //物品的數量
+) {
+	static bool special=false;  //現在若為特殊狀態則為true
+	static int time;            //特殊攻擊的剩餘時間
+	
+	//一般狀態時
+	if (!special) {
+
+		//執行一般攻擊：
+		//具體的處理是以NormalAttack函數來執行。
+		NormalAttack();
+		
+		//是否拾獲物品的判定：
+		//拾獲時則轉換為特殊狀態，並設定剩餘時間。
+		for (int i=0; i<num_item; i++) {
+			if (ix0[i]<x1 && x0<ix1[i] && 
+				iy0[i]<y1 && y0<iy1[i]) {
+				special=true;
+				time=300;
+			}
+		}
+	}
+	
+	//特殊狀態時
+	else {
+		
+		//進行特殊攻擊：
+		//具體處理是以SpecialAttack函數來執行。
+		SpecialAttack();
+		
+		//判定是否經過一段時間：
+		//若無剩餘時間，則恢復一般狀態。
+		if (time==0) special=false; else time--;
+	}
+}

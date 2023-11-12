@@ -1,0 +1,28 @@
+LIST4-10 子彈的命中判定處理
+void HitShot(
+	float x0, float y0,    //子彈命中判定的左上座標
+	float x1, float y1,    //子彈命中判定的右下座標
+	float attack,          //子彈的攻擊力
+	float ox0, float oy0,  //對象的命中判定左上座標
+	float ox1, float oy1,  //對象的命中判定右下座標
+	float endurance,       //對象的耐久力
+	bool invincible        //對象是否無法破壞
+) {
+	//子彈擊中對象時
+	if (ox0<x1 && x0<ox1 && oy0<y1 && y0<oy1) {
+
+		//對象非無敵時：
+		//以子彈攻擊力來削減對象的耐久力，
+		//耐久力變為0時，就把對象消除。
+		//具體處理是以DeleteOpponent函數來執行。
+		if (!invincible) {
+			endurance-=attack;
+			if (endurance<0) DeleteOpponent();
+		}
+		
+		//消除子彈：
+		//具體處理是以DeleteShot函數來執行。
+		//這裡如果不消除子彈，就會形成貫穿彈。
+		DeleteShot();
+	}
+}

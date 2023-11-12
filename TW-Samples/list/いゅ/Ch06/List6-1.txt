@@ -1,0 +1,35 @@
+List6-1 可破壞的敵機
+void BreakableEnemy(
+	int num_enemy,             // 敵機數量
+	float ex0[], float ey0[],  // 敵機命中判定的左上座標
+	float ex1[], float ey1[],  // 敵機命中判定的右下座標
+	float vit[],               // 敵機的血量
+	int num_weapon,            // 武器的數量
+	float wx0[], float wy0[],  // 武器命中判定的左上座標
+	float wx1[], float wy1[],  // 武器命中判定的右下座標
+	float str[]                // 武器的攻擊力
+) {
+	// 敵機和武器的命中判定處理：
+	// 觀魚畫面上所有敵機和武器的組合，
+	// 要進行是否有武器命中敵機的判定
+	for (int i=0; i<num_enemy; i++) {
+		for (int j=0; j<num_weapon; j++) {
+			if (ex0[i]<wx1[j] && wx0[j]<ex1[i] && 
+				ey0[i]<wy1[j] && wy0[j]<ey1[i]
+			) {
+				// 如果命中的話：
+				// 從敵機血量減掉武器的攻擊力，
+				// 當血量變成了0或負值時，則破壞敵機。
+				// 關於破壞的具體處理移至
+				// DeleteEnemy函數來處理。
+				vit[i]-=str[j];
+				if (vit[i]<=0) DeleteEnemy(i);
+				
+				// 命中的武器就消除掉：
+				// 具體的處理移至DeleteWeapon函數處理。
+				DeleteWeapon(j);
+			}
+		}
+	}
+}
+

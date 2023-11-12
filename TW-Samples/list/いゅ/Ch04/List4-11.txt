@@ -1,0 +1,13 @@
+List4-11 子彈威力隨敵人的距離變化
+void ShotPower(
+	float& x, float& y,  //子彈的座標
+	float vx, float vy,  //子彈的速度
+	float& power,        //子彈的威力
+	float attenuation    //威力衰減的程度
+) {
+	//讓子彈移動
+	x+=vx; y+=vy;
+	
+	//每次移動時，減弱子彈的威力
+	power-=attenuation;
+}

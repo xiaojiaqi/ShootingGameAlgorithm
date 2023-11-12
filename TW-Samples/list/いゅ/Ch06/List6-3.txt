@@ -1,0 +1,25 @@
+List6-3 敵機的出現與消失
+void Enemy(
+	int num_enemy,             // 敵機數量
+	float ex0[], float ey0[],  // 敵機命中判定範圍的左上座標
+	float ex1[], float ey1[],  // 敵機命中判定範圍的右下座標
+	float sx0, float sy0,      // 可移動範圍(畫面框)的左上座標
+	float sx1, float sy1       // 可移動範圍(畫面框)的右下座標
+) {
+	for (int i=0; i<num_enemy; i++) {
+		
+		// 敵機的移動：
+		// 關於移動的具體處理移至DeleteEnemy函數處理。
+		MoveEnemy(i);
+		
+		// 敵機的消失：
+		// 判斷敵機是否已跑出畫面外，
+		// 若已跑出畫面外就要消除。
+		// 關於消失的具體處理移至DeleteEnemy函數處理。
+		if (ex1[i]<=sx0 || sx1<=ex0[i] || 
+			ey1[i]<=sy0 || sy1<=ey0[i]) {
+			DeleteEnemy(i);
+		}
+	}
+}
+

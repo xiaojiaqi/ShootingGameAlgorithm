@@ -1,0 +1,16 @@
+List3-2考慮可移動範圍的自機移動
+void MoveMyShip2(
+	float& x, float& y,    //自機的座標（X方向，Y方向）
+	float speed,           //自機的速度
+	float x0, float y0,    // 自機的左上座標
+	float x1, float y1,    //自機的右下座標
+	float sx0, float sy0,  //可移動範圍框內的左上座標
+	float sx1, float sy1,  //可移動範圍框內的右下座標
+	bool up, bool down,    //朝上下方向的搖桿輸入
+	bool left, bool right  //朝左右方向的搖桿輸入
+) {
+	if (up    && sy0<=y0) y-=speed;
+	if (down  && y1<=sy1) y+=speed;
+	if (left  && sx0<=x0) x-=speed;
+	if (right && x1<=sx1) x+=speed;
+}

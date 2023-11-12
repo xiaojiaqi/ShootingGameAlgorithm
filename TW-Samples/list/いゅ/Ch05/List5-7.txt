@@ -1,0 +1,18 @@
+List5-7被投擲機體的移動
+void MoveThrownShip(
+	float& x0, float& y0,  //機體的左上座標 
+	float& x1, float& y1,  //機體的右下座標
+	float& vx, float& vy,  //機體的速度
+	float sx0, float sy0,  //可移動範圍（畫面框）的左上座標
+	float sx1, float sy1   //可移動範圍（畫面框）的右下座標
+) {
+	//四處跳動的處理：
+	//要是快要超出畫面框的上下左右，
+	//則使移動速度呈倒轉過來。
+	if (x0+vx<sx0 || sx1<=x1+vx) vx=-vx;
+	if (y0+vy<sy0 || sy1<=y1+vy) vy=-vy;
+	
+	//讓機體移動
+	x0+=vx; x1+=vx;
+	y0+=vy; y1+=vy;
+}

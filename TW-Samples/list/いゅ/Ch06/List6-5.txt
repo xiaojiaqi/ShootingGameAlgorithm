@@ -1,0 +1,12 @@
+List6-5 固定砲台
+void MoveFixedBattery(
+	int num_enemy,           // 敵機(固定砲台)的數量
+	float ex[], float ey[],  // 敵機(固定砲台)的座標
+	float svx, float svy     // 背景的移動速度（捲軸速度）
+) {
+	// 將所有固定砲台的移動速度調成和背景一樣
+	for (int i=0; i<num_enemy; i++) {
+		ex[i]+=svx;
+		ey[i]+=svy;
+	}
+}

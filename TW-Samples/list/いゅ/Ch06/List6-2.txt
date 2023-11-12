@@ -1,0 +1,48 @@
+List6-2 無法破壞的敵機
+// 表示敵機類型的常數：
+// 可破壞、無法破壞、武器不會命中
+typedef enum {
+	BREAKABLE, UNBREAKABLE, TRANSPARENT
+} ENEMY_TYPE;
+
+// 包括無法破壞的敵機在內之敵機處理
+void BreakableEnemy2(
+	int num_enemy,             // 敵機的數量
+	ENEMY_TYPE type[],         // 敵機的類型
+	float ex0[], float ey0[],  // 敵機命中判定範圍的左上座標
+	float ex1[], float ey1[],  // 敵機命中判定範圍的右下座標
+	float vit[],               // 敵機的血量
+	int num_weapon,            // 武器的數量
+	float wx0[], float wy0[],  // 武器命中判定範圍的左上座標
+	float wx1[], float wy1[],  // 武器命中判定範圍的右下座標
+	float str[]                // 武器的攻擊力
+) {
+	// 處理所有敵機的迴圈
+	for (int i=0; i<num_enemy; i++) {
+		
+		// 武器打不中的敵機：
+		// 不進行命中判定處理，直接進入下一個敵機的處理
+		if (type[i]==TRANSPARENT) continue;
+		
+		// 敵機和武器之間的命中判定處理
+		for (int j=0; j<num_weapon; j++) {
+			if (ex0[i]<wx1[j] && wx0[j]<ex1[i] && 
+				ey0[i]<wy1[j] && wy0[j]<ey1[i]
+			) {
+				// 若打中可破壞的敵機：
+				// 從敵機血量減掉武器的攻擊力，
+				// 若血量變成0或是負值則破壞敵機。
+				// 關於破壞的具體處理移至
+				// DeleteEnemy函數處理。
+				if (type[i]==BREAKABLE) {
+					vit[i]-=str[j];
+					if (vit[i]<=0) DeleteEnemy(i);
+				}
+				
+				// 武器命中敵機的話就刪除：
+				// 具體的處理移至DeleteWeapon函數處理。
+				DeleteWeapon(j);
+			}
+		}
+	}
+}
